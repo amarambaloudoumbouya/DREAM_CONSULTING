@@ -1,0 +1,72 @@
+# Général (tous OS)
+git rm -r --cached node_modules
+git add .
+git commit -m "Ajout du .gitignore"
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.env
+*.egg-info/
+
+# Django
+settings.py
+wsgi.py
+asgi.py
+manage.py
+requirements.txt
+requirements-dev.txt
+requirements-prod.txt
+
+# Node
+node_modules/
+.env
+dist/
+build/
+*.log
+
+
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Django
+*.log
+*.pot
+db.sqlite3
+/media/
+staticfiles/
+local_settings.py
+
+# Environment variables
+.env
+.env.*
+
+# IDE / Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Migrations (optionnel : à garder si vous voulez que les migrations soient versionnées)
+# */migrations/
+
+# Scripts temporaires
+seed_fictive_data.py
