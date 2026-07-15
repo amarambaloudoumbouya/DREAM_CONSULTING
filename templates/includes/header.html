@@ -1,30 +1,22 @@
 {% load static %}
 <style>
-    .logo .logo-text {
+    .logo .logo-link {
         display: inline-flex;
-        align-items: baseline;
-        gap: 6px;
-        font-family: 'Poppins', sans-serif;
-        font-size: 30px;
-        font-weight: 600;
-        line-height: 1;
-        letter-spacing: .5px;
-        color: #1B1464;
-        transition: all .3s ease;
+        align-items: center;
+        transition: opacity .3s ease;
     }
-    .logo .logo-text .logo-mark {
-        color: #F7941D;
-    }
-    .logo .logo-text .logo-sub {
-        font-family: 'Poppins', sans-serif;
-        font-size: 13px;
-        font-weight: 500;
-        letter-spacing: 3px;
-        text-transform: uppercase;
-        color: #29ABE2;
-    }
-    .logo .logo-text:hover {
+    .logo .logo-link:hover {
         opacity: .85;
+    }
+    .logo .logo-img {
+        height: 120px;
+        width: auto;
+        display: block;
+    }
+    @media (max-width: 767px) {
+        .logo .logo-img {
+            height: 90px;
+        }
     }
 </style>
 <div id="header-1" class="header-area">
@@ -35,7 +27,9 @@
 
                     <!-- Logo -->
                     <div class="logo">
-                        <a class="navbar-brand logo-text" href="{% url 'site_:index' %}"><span class="logo-mark">Dream Consulting</span> <span class="logo-sub">Com</span></a>
+                        <a class="navbar-brand logo-link" href="{% url 'site_:index' %}">
+                            <img src="{% static 'front/assets/img/logo/logo_dream.png' %}" alt="Dream Consulting Com" class="logo-img">
+                        </a>
                     </div>
 
                     <!-- Main Menu -->
