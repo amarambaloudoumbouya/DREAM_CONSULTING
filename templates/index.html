@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+
+    {% block title %}
+        <title>Accueil | Dream Consulting Com</title>
+    {% endblock %}
+
+    {% include "includes/head.html" %} 
+    
+    {% block styles %}
+
+    {% endblock %}
+        
+</head>
+
+<body>
+
+    <!-- Pre-Loader -->
+    <div id="loader"></div>
+
+    <!-- Mouse Cursor  -->
+    <div class="mouseCursor cursor-outer"></div>
+    <div class="mouseCursor cursor-inner"><span>Drag</span></div>
+
+    <!-- Header Area -->
+    {% include "includes/header.html" %}
+
+    {% block content %}
+    
+    <!-- Hero Area -->
+    {% include "includes/slider.html" %}
+
+    <!-- Service Section -->
+
+    <!-- About Section -->
+    {% include "includes/about.html" %}
+
+    <!-- Gallery Section -->
+
+    <!-- Project Section -->
+    {% include "includes/project.html" %}
+
+    <!-- Process Section -->
+    
+    <!-- Testimonial Section -->
+    {% include "includes/testimonial.html" %}
+
+    <!-- Team Section -->
+    {% include "includes/team.html" %}
+  
+    <!-- Blog Section -->
+    {% endblock %}
+    <!-- Partenaire Section -->
+    {% include "includes/partenaire.html" %} 
+
+
+    <!-- Footer Section -->
+    {% include "includes/footer.html" %}
+
+    <!-- back to top start -->
+    <div class="progress-wrap">
+        <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+            <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" />
+        </svg>
+    </div>
+
+    {% include "includes/foot.html" %}
+
+    {% block scripts %}
+
+    {% endblock %}
+
+</body>
+</html>

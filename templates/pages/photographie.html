@@ -1,0 +1,193 @@
+{% extends "index.html" %}
+{% load static %}
+<!-- Title -->
+{% block title %}
+    <title>Photographie | Dream Consulting Com</title>
+{% endblock title %}
+
+<!-- Styles -->
+{% block styles %}
+<style>
+    .photography-section .single-photo-item {
+        position: relative;
+        border-radius: 14px;
+        overflow: hidden;
+        display: block;
+        box-shadow: 0 15px 40px rgba(28, 80, 58, .10);
+    }
+    .photography-section .single-photo-item img {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+        display: block;
+        transition: transform .6s ease;
+    }
+    .photography-section .single-photo-item:hover img {
+        transform: scale(1.08);
+    }
+    .photography-section .single-photo-item .photo-overlay {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        background: linear-gradient(to top, rgba(28,80,58,.85), rgba(28,80,58,0));
+        opacity: 0;
+        transition: opacity .4s ease;
+    }
+    .photography-section .single-photo-item:hover .photo-overlay {
+        opacity: 1;
+    }
+    .photography-section .photo-overlay span {
+        font-size: 12px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: #29ABE2;
+        margin-bottom: 6px;
+    }
+    .photography-section .photo-overlay h5 {
+        color: #fff;
+        margin: 0 0 10px;
+        font-size: 20px;
+    }
+    .photography-section .photo-overlay i {
+        color: #fff;
+        font-size: 26px;
+    }
+</style>
+{% endblock styles %}
+
+<!-- Content -->
+{% block content %}
+
+    <!-- Breadcrumb Area  -->
+    <div class="breadcrumb-area team">  
+        <div class="overlay-3"></div>  
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6 text-center">
+                    <div class="breadcrumb-title">
+                        <h1>Photographie</h1>
+                    </div>
+                    <div class="breadcrumb-icon">
+                        <i class="las la-angle-down"></i>                    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+   <!-- Photography Section -->
+     <div class="photography-section section-padding pb-90">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-7 col-lg-8 col-md-10 text-center">
+                    <div class="section-title">
+                        <h2 class="visible-slowly-right">Notre <span>galerie</span> photo</h2>
+                        <p class="pt-20 wow fadeInUp animated" data-wow-delay=".4s">Une sélection de nos plus beaux clichés : mariages, portraits, cérémonies et événements immortalisés avec passion. Cliquez sur une image pour l'agrandir.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row gy-4 mt-30">
+                <div class="col-xl-4 col-lg-4 col-md-6">
+                    <a href="{% static 'front/assets/img/gallery/1.jpg' %}" data-fancybox="photographie" class="single-photo-item">
+                        <img src="{% static 'front/assets/img/gallery/1.jpg' %}" alt="Mariage">
+                        <div class="photo-overlay">
+                            <span>Mariage</span>
+                            <h5>Cérémonie de mariage</h5>
+                            <i class="las la-search-plus"></i>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6">
+                    <a href="{% static 'front/assets/img/gallery/2.jpg' %}" data-fancybox="photographie" class="single-photo-item">
+                        <img src="{% static 'front/assets/img/gallery/2.jpg' %}" alt="Portrait">
+                        <div class="photo-overlay">
+                            <span>Portrait</span>
+                            <h5>Séance en studio</h5>
+                            <i class="las la-search-plus"></i>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6">
+                    <a href="{% static 'front/assets/img/gallery/3.jpg' %}" data-fancybox="photographie" class="single-photo-item">
+                        <img src="{% static 'front/assets/img/gallery/3.jpg' %}" alt="Événement">
+                        <div class="photo-overlay">
+                            <span>Événement</span>
+                            <h5>Événement d'entreprise</h5>
+                            <i class="las la-search-plus"></i>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6">
+                    <a href="{% static 'front/assets/img/gallery/4.jpg' %}" data-fancybox="photographie" class="single-photo-item">
+                        <img src="{% static 'front/assets/img/gallery/4.jpg' %}" alt="Cérémonie">
+                        <div class="photo-overlay">
+                            <span>Cérémonie</span>
+                            <h5>Reportage de cérémonie</h5>
+                            <i class="las la-search-plus"></i>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6">
+                    <a href="{% static 'front/assets/img/gallery/5.jpg' %}" data-fancybox="photographie" class="single-photo-item">
+                        <img src="{% static 'front/assets/img/gallery/5.jpg' %}" alt="Portrait">
+                        <div class="photo-overlay">
+                            <span>Portrait</span>
+                            <h5>Portrait lifestyle</h5>
+                            <i class="las la-search-plus"></i>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6">
+                    <a href="{% static 'front/assets/img/gallery/6.jpg' %}" data-fancybox="photographie" class="single-photo-item">
+                        <img src="{% static 'front/assets/img/gallery/6.jpg' %}" alt="Fête">
+                        <div class="photo-overlay">
+                            <span>Fête</span>
+                            <h5>Anniversaire</h5>
+                            <i class="las la-search-plus"></i>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6">
+                    <a href="{% static 'front/assets/img/project/1-1.jpg' %}" data-fancybox="photographie" class="single-photo-item">
+                        <img src="{% static 'front/assets/img/project/1-1.jpg' %}" alt="Mariage">
+                        <div class="photo-overlay">
+                            <span>Mariage</span>
+                            <h5>Couple de mariés</h5>
+                            <i class="las la-search-plus"></i>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6">
+                    <a href="{% static 'front/assets/img/project/1-2.jpg' %}" data-fancybox="photographie" class="single-photo-item">
+                        <img src="{% static 'front/assets/img/project/1-2.jpg' %}" alt="Studio">
+                        <div class="photo-overlay">
+                            <span>Studio</span>
+                            <h5>Portrait professionnel</h5>
+                            <i class="las la-search-plus"></i>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6">
+                    <a href="{% static 'front/assets/img/project/1-3.jpg' %}" data-fancybox="photographie" class="single-photo-item">
+                        <img src="{% static 'front/assets/img/project/1-3.jpg' %}" alt="Événement">
+                        <div class="photo-overlay">
+                            <span>Événement</span>
+                            <h5>Soirée événementielle</h5>
+                            <i class="las la-search-plus"></i>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+     </div>
+
+{% endblock content %}
+
+<!-- Scripts -->
+{% block scripts %}
+
+{% endblock scripts %}

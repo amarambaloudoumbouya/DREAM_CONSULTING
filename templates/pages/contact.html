@@ -1,0 +1,157 @@
+{% extends "index.html" %}
+{% load static %}
+<!-- Title -->
+{% block title %}
+    <title>Contact | Dream Consulting Com</title>
+{% endblock title %}
+
+<!-- Styles -->
+{% block styles %}
+<style>
+    .contact-section .subimit-form-wrap form {
+        margin-top: 40px;
+        background: #fff;
+        padding: 40px;
+        border-radius: 16px;
+        box-shadow: 0 20px 50px rgba(27, 20, 100, .08);
+        border: 1px solid #e8e7f3;
+    }
+    .contact-section .subimit-form-wrap input,
+    .contact-section .subimit-form-wrap textarea {
+        width: 100%;
+        border: 1px solid #d8d6ef;
+        border-radius: 10px;
+        background: #f5f4fb;
+        padding: 14px 18px;
+        margin-bottom: 20px;
+        font-size: 15px;
+        color: #1B1464;
+        transition: all .3s ease;
+    }
+    .contact-section .subimit-form-wrap input::placeholder,
+    .contact-section .subimit-form-wrap textarea::placeholder {
+        color: #9aa39d;
+    }
+    .contact-section .subimit-form-wrap input:focus,
+    .contact-section .subimit-form-wrap textarea:focus {
+        outline: none;
+        border-color: #F7941D;
+        background: #fff;
+        box-shadow: 0 0 0 4px rgba(247, 148, 29, .12);
+    }
+    .contact-section .subimit-form-wrap textarea {
+        height: auto;
+        min-height: 140px;
+        resize: vertical;
+    }
+    .contact-section .subimit-form-wrap input[type=submit] {
+        width: auto;
+        min-width: 200px;
+        margin-bottom: 0;
+        padding: 15px 40px;
+        background: #F7941D;
+        color: #fff;
+        border: none;
+        font-weight: 600;
+        letter-spacing: .5px;
+        cursor: pointer;
+    }
+    .contact-section .subimit-form-wrap input[type=submit]:hover {
+        background: #1B1464;
+        box-shadow: 0 10px 25px rgba(27, 20, 100, .2);
+    }
+</style>
+{% endblock styles %}
+
+<!-- Content -->
+{% block content %}
+    <!-- Breadcrumb Area  -->
+    <div class="breadcrumb-area contact">  
+        <div class="overlay-3"></div>  
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    <div class="breadcrumb-title">
+                        <h1>Contact</h1>
+                    </div>
+                    <div class="breadcrumb-icon">
+                        <i class="las la-angle-down"></i>                    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Section  -->
+    <div class="contact-section section-padding">
+        <div class="container">                        
+            <div class="row">
+                <div class="col-xl-5 col-lg-5">
+                    <div class="contact-text">
+                        <p>Une question sur nos prestations de photographie ou d'événementiel ? Envie de nous confier votre mariage, votre séance photo ou votre événement ? Nous sommes à votre écoute ! Remplissez le formulaire ci-dessous et un membre de notre équipe vous répondra sous 24 heures. Vous pouvez aussi nous joindre par téléphone ou par e-mail grâce aux coordonnées indiquées ci-dessous. Au plaisir d'échanger avec vous !</p>
+                    </div>
+                </div>
+                <div class="offset-xl-1 col-xl-6 offset-lg-1 col-lg-6">
+                    <div class="subimit-form-wrap">
+                        <div class="section-title">
+                            <h2 class="visible-slowly-right">Envoyez-nous un message</h2>
+                        </div>
+                        <form action="" method="post">
+                            {% csrf_token %}
+                            <input type="text" name="name" placeholder="Nom complet" required>
+                            <input type="email" name="email" placeholder="Adresse e-mail" required>
+                            <input type="tel" name="phone" placeholder="Numéro de téléphone" required>
+                            <input type="text" name="subject" placeholder="Type de projet (mariage, portrait, événement...)" required>
+                            <textarea name="message" cols="30" rows="10" placeholder="Décrivez-nous votre projet" required></textarea>
+                            <input type="submit" value="Envoyer le message">
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="contact-info-wrap">
+                <div class="row mt-60">
+                    <div class="col-xl-6">
+                        <div class="google-map">
+                            <iframe src="https://www.google.com/maps?q=Conakry,+Guin%C3%A9e&output=embed" width="600" height="600" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>        
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <div class="contact-info">
+                            <div class="section-title">
+                                <h2 class="visible-slowly-right">Nos coordonnées</h2>
+                            </div>
+                            <div class="contact-info-inner">
+                                <div class="single-contact-info wow fadeInUp animated" data-wow-delay="200ms">
+                                    <p>E-mail</p>
+                                    <h4>dreamconsulting224@gmail.com</h4>
+                                </div>
+                                <div class="single-contact-info wow fadeInUp animated" data-wow-delay="400ms">
+                                    <p>Téléphone</p>
+                                    <h4>+224 611 73 02 93</h4>
+                                </div>
+                                <div class="single-contact-info wow fadeInUp animated" data-wow-delay="600ms">
+                                    <p>Adresse</p>
+                                    <h4>Conakry, Guinée</h4>
+                                </div>  
+                                <div class="social-area">
+                                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                    <a href="#"><i class="fab fa-instagram"></i></a>
+                                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                                    <a href="#"><i class="fab fa-skype"></i></a>
+                                </div>                          
+                            </div>
+                        </div>
+                    </div>
+                </div>        
+            </div>            
+            
+        </div>
+    </div>
+
+{% endblock content %}
+
+<!-- Scripts -->
+{% block scripts %}
+
+{% endblock scripts %}
+

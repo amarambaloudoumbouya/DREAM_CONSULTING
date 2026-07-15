@@ -1,0 +1,110 @@
+{% load static %}
+<style>
+    .logo .logo-text {
+        display: inline-flex;
+        align-items: baseline;
+        gap: 6px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 30px;
+        font-weight: 600;
+        line-height: 1;
+        letter-spacing: .5px;
+        color: #1B1464;
+        transition: all .3s ease;
+    }
+    .logo .logo-text .logo-mark {
+        color: #F7941D;
+    }
+    .logo .logo-text .logo-sub {
+        font-family: 'Poppins', sans-serif;
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: #29ABE2;
+    }
+    .logo .logo-text:hover {
+        opacity: .85;
+    }
+</style>
+<div id="header-1" class="header-area">
+    <div id="header-sticky">
+        <div class="navigation">
+            <div class="container">
+                <div class="header-inner-box">
+
+                    <!-- Logo -->
+                    <div class="logo">
+                        <a class="navbar-brand logo-text" href="{% url 'site_:index' %}"><span class="logo-mark">Dream Consulting</span> <span class="logo-sub">Com</span></a>
+                    </div>
+
+                    <!-- Main Menu -->
+                    <div class="main-menu d-none d-lg-block">
+                        <ul>
+                            <li class="active"><a class="navlink" href="{% url 'site_:index' %}">Accueil</a></li>
+
+                            <li><a class="navlink" href="#">Services</a>
+                                <ul class="sub-menu">
+                                    <li><a href="{% url 'site_:photographie' %}">Photographie</a></li>
+                                    <li><a href="{% url 'site_:video' %}">Vidéo</a></li>
+                                    <li><a href="{% url 'site_:branding' %}">Branding</a></li>
+                                </ul>
+                            </li>   
+
+                            <li><a class="navlink" href="{% url 'site_:apropos' %}">À propos</a></li>
+
+                            <li><a class="navlink" href="{% url 'site_:contact' %}">Contact</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="header-right">
+                        
+                        <div class="contact-number d-none d-xl-inline-flex">
+                            <div class="icon"><i class="las la-phone-volume"></i></div>
+                            <div class="title"><h6>+224 611 73 02 93</h6></div>
+                        </div>
+                        <!-- Header Button -->
+                        <a href="{% url 'site_:demande_avis' %}" class="theme-btn d-none d-lg-inline-block">Demander un Devis</a>                                                        
+                    </div>
+
+                    <!-- Mobile Menu -->
+                    <div class="mobile-nav-bar d-block col-sm-1 col-6 d-lg-none">
+                        <div class="mobile-nav-wrap">
+                            <div id="hamburger">
+                                <i class="las la-bars"></i>
+                            </div>
+                            <!-- mobile menu - responsive menu  -->
+                            <div class="mobile-nav">
+                                <button type="button" class="close-nav">
+                                    <i class="las la-times-circle"></i>
+                                </button>
+                                <nav class="sidebar-nav">
+                                    <ul class="metismenu" id="mobile-menu">
+                                        <li><a href="site_:index">Accueil</a></li>
+        
+                                        <li><a class="has-arrow" href="#">Services</a>
+                                            <ul class="sub-menu">
+                                                <li><a href="{% url 'site_:photographie' %}">Photographie</a></li>
+                                                <li><a href="{% url 'site_:video' %}">Vidéo</a></li>
+                                                <li><a href="{% url 'site_:branding' %}">Branding</a></li>
+                                            </ul>
+                                        </li>
+                                        
+                                        <li><a href="{% url 'site_:apropos' %}">À propos</a></li>
+                                        <li><a href="{% url 'site_:contact' %}">Contact</a></li>
+
+                                    </ul>
+                                </nav>
+                                <div class="action-bar">
+                                    <a href="mailto:dreamconsulting224@gmail.com"><i class="las la-envelope"></i>dreamconsulting224@gmail.com</a>
+                                    <a href="tel:+224611730293"><i class="fal fa-phone"></i>+224 611 73 02 93</a>
+                                    <a href="{% url 'site_:contact' %}" class="theme-btn">Contactez-nous</a>
+                                </div>
+                            </div>
+                        </div>                            
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
