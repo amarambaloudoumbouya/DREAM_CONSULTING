@@ -8,6 +8,20 @@
 <!-- Styles -->
 {% block styles %}
 <style>
+    .breadcrumb-area.breadcrumb-branding {
+        background-image: url("{% static 'front/assets/img/breadcrumb/dream_branding_2.jpeg' %}");
+        background-position: center center;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-color: #1B1464;
+        height: 480px;
+    }
+    @media (max-width: 767px) {
+        .breadcrumb-area.breadcrumb-branding {
+            height: 280px;
+            background-size: contain;
+        }
+    }
     .branding-section .single-branding-item {
         position: relative;
         border-radius: 16px;
@@ -50,7 +64,7 @@
 {% block content %}
 
     <!-- Breadcrumb Area  -->
-    <div class="breadcrumb-area team">  
+    <div class="breadcrumb-area team breadcrumb-branding">  
         <div class="overlay-3"></div>  
         <div class="container">
             <div class="row justify-content-center">
