@@ -29,3 +29,5 @@ urlpatterns = [
     path('temoignages/', include('temoignage.urls')),
     path('collaborateurs/', include('collaborateur.urls')),
 ]+static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+
+handler404 = 'site_.views.page_not_found'

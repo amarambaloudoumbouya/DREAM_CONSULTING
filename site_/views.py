@@ -38,3 +38,7 @@ def demande_avis(request):
 
 def donner_avis(request):
     return temoignage_donner_avis(request)
+
+
+def page_not_found(request, exception):
+    return render(request, '404.html', status=404)

@@ -1,0 +1,107 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block title %}
+    <title>Page introuvable | Dream Consulting Com</title>
+{% endblock title %}
+
+{% block styles %}
+<style>
+    .error-404-section {
+        min-height: 70vh;
+        display: flex;
+        align-items: center;
+        background:
+            radial-gradient(circle at top right, rgba(247, 148, 29, .18), transparent 42%),
+            linear-gradient(160deg, #f7f6fb 0%, #ffffff 48%, #fff7ec 100%);
+        padding: 120px 0 100px;
+    }
+    .error-404-content {
+        text-align: center;
+        max-width: 640px;
+        margin: 0 auto;
+    }
+    .error-404-code {
+        font-size: clamp(96px, 18vw, 160px);
+        line-height: .9;
+        font-weight: 700;
+        color: #1B1464;
+        margin: 0 0 12px;
+        letter-spacing: -4px;
+    }
+    .error-404-code span {
+        color: #F7941D;
+    }
+    .error-404-content h2 {
+        font-size: clamp(28px, 4vw, 42px);
+        color: #1B1464;
+        margin: 0 0 16px;
+        font-weight: 600;
+    }
+    .error-404-content p {
+        font-size: 16px;
+        line-height: 1.7;
+        color: #666;
+        margin: 0 0 32px;
+    }
+    .error-404-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        justify-content: center;
+    }
+    .error-404-actions .theme-btn,
+    .error-404-actions .bordered-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 14px 26px;
+        border-radius: 7px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: .3s;
+    }
+    .error-404-actions .theme-btn {
+        background: #F7941D;
+        border: 1px solid #F7941D;
+        color: #fff;
+    }
+    .error-404-actions .theme-btn:hover {
+        background: #1B1464;
+        border-color: #1B1464;
+        color: #fff;
+    }
+    .error-404-actions .bordered-btn {
+        background: transparent;
+        border: 1px solid #1B1464;
+        color: #1B1464;
+    }
+    .error-404-actions .bordered-btn:hover {
+        background: #1B1464;
+        color: #fff;
+    }
+</style>
+{% endblock styles %}
+
+{% block content %}
+<div class="error-404-section">
+    <div class="container">
+        <div class="error-404-content">
+            <p class="error-404-code">4<span>0</span>4</p>
+            <h2>Page introuvable</h2>
+            <p>
+                La page que vous recherchez n'existe pas ou a été déplacée.
+                Vérifiez l'adresse ou revenez à l'accueil pour continuer votre visite.
+            </p>
+            <div class="error-404-actions">
+                <a href="{% url 'site_:index' %}" class="theme-btn">
+                    Retour à l'accueil <i class="fa-light fa-arrow-right"></i>
+                </a>
+                <a href="{% url 'site_:contact' %}" class="bordered-btn">
+                    Nous contacter
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
