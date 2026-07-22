@@ -11,12 +11,9 @@ venv/
 *.egg-info/
 *.py[cod]
 
-# Django
-settings.py
-wsgi.py
-asgi.py
-manage.py
-requirements.txt
+# Django — ne PAS ignorer config/settings.py, manage.py, requirements.txt
+# (sinon les correctifs ne partent jamais en production via git pull)
+local_settings.py
 requirements-dev.txt
 requirements-prod.txt
 

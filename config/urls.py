@@ -17,7 +17,6 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include, re_path
 from django.conf import settings
-from django.conf.urls.static import static
 from django.views.static import serve
 
 urlpatterns = [
@@ -31,13 +30,16 @@ urlpatterns = [
     path('collaborateurs/', include('collaborateur.urls')),
 ]
 
-if settings.DEBUG:
-    # Les static sont servis par runserver + WhiteNoise finders (STATICFILES_DIRS).
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-else:
-    # Media en prod (Passenger / hébergement partagé)
-    urlpatterns += [
-        re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
-    ]
+# Important: django.conf.urls.static.static() ne fait RIEN si DEBUG=False.
+# Sur Passenger / cPanel, Django doit servir CSS/JS/images lui-même.
+_static_dir = (
+    settings.STATICFILES_DIRS[0]
+    if getattr(settings, 'STATICFILES_DIRS', None)
+    else settings.STATIC_ROOT
+)
+urlpatterns += [
+    re_path(r'^static/(?P<path>.*)$', serve, {'document_root': str(_static_dir)}),
+    re_path(r'^media/(?P<path>.*)$', serve, {'document_root': str(settings.MEDIA_ROOT)}),
+]
 
 handler404 = 'site_.views.page_not_found'
