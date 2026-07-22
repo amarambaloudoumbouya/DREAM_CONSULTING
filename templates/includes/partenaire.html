@@ -11,37 +11,42 @@
         </div>
         <div class="row mt-40">
             <div class="col-12">
+                {% if partenaires %}
                 <div class="partner-slider owl-carousel">
+                    {% for partenaire in partenaires %}
                     <div class="single-partner-item">
-                        <img src="{% static 'front/assets/img/partner/1.png' %}" alt="Partenaire">
+                        {% if partenaire.site_web %}
+                        <a href="{{ partenaire.site_web }}" target="_blank" rel="noopener" title="{{ partenaire.nom }}">
+                            <img src="{{ partenaire.logo_url }}" alt="{{ partenaire.nom }}">
+                        </a>
+                        {% else %}
+                        <img src="{{ partenaire.logo_url }}" alt="{{ partenaire.nom }}">
+                        {% endif %}
                     </div>
-                    <div class="single-partner-item">
-                        <img src="{% static 'front/assets/img/partner/2.png' %}" alt="Partenaire">
-                    </div>
-                    <div class="single-partner-item">
-                        <img src="{% static 'front/assets/img/partner/3.png' %}" alt="Partenaire">
-                    </div>
-                    <div class="single-partner-item">
-                        <img src="{% static 'front/assets/img/partner/4.png' %}" alt="Partenaire">
-                    </div>
-                    <div class="single-partner-item">
-                        <img src="{% static 'front/assets/img/partner/5.png' %}" alt="Partenaire">
-                    </div>
-                    <div class="single-partner-item">
-                        <img src="{% static 'front/assets/img/partner/6.png' %}" alt="Partenaire">
-                    </div>
+                    {% endfor %}
                 </div>
+                {% else %}
+                <p class="text-center mb-0">Nos partenaires seront bientôt présentés ici.</p>
+                {% endif %}
             </div>
         </div>
     </div>
 </div>
 
 <style>
+    .partner-section .partner-slider.owl-carousel {
+        display: block;
+    }
     .partner-section .single-partner-item {
         display: flex;
         align-items: center;
         justify-content: center;
         height: 100px;
+    }
+    .partner-section .single-partner-item a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     .partner-section .single-partner-item img {
         max-height: 70px;

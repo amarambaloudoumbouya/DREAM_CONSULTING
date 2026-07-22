@@ -1,0 +1,307 @@
+{% extends 'backend/dashboard.html' %}
+{% block title %}
+<title>Dream consulting com - Liste des inscrits</title>
+{% endblock title %}
+
+{% block style %}
+<style>
+    .inscrits-stats .stat-widget .card-body {
+        padding: 22px 20px;
+    }
+    .inscrits-stats .stat-widget .stat-label {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 8px;
+    }
+    .inscrits-stats .stat-widget .stat-label h5 {
+        margin: 0;
+        font-size: 13px;
+        font-weight: 500;
+        color: #8a8a8a;
+        text-transform: uppercase;
+        letter-spacing: .4px;
+    }
+    .inscrits-stats .stat-widget .stat-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+    }
+    .inscrits-stats .stat-widget h2 {
+        margin: 0 0 6px;
+        font-size: 32px;
+        font-weight: 600;
+        color: #2c2c2c;
+        line-height: 1.1;
+    }
+    .inscrits-stats .stat-widget p {
+        margin: 0 0 12px;
+        font-size: 12px;
+        color: #9a9a9a;
+    }
+    .inscrits-stats .stat-total .stat-icon {
+        background: rgba(27, 20, 100, .1);
+        color: #1B1464;
+    }
+    .inscrits-stats .stat-new .stat-icon {
+        background: rgba(247, 148, 29, .15);
+        color: #F7941D;
+    }
+    .inscrits-stats .stat-ok .stat-icon {
+        background: rgba(40, 167, 69, .12);
+        color: #28a745;
+    }
+    .inscrits-stats .stat-ko .stat-icon {
+        background: rgba(220, 53, 69, .12);
+        color: #dc3545;
+    }
+    .inscrits-stats .progress {
+        height: 6px;
+        border-radius: 4px;
+        background: #eef0f4;
+    }
+    .inscrits-stats .progress-bar {
+        border-radius: 4px;
+    }
+    .inscrits-stats .bar-total { background: #1B1464; }
+    .inscrits-stats .bar-new { background: #F7941D; }
+    .inscrits-stats .bar-ok { background: #28a745; }
+    .inscrits-stats .bar-ko { background: #dc3545; }
+</style>
+{% endblock style %}
+
+{% block content %}
+<div class="page-content">
+    <div class="main-wrapper">
+
+        {% if messages %}
+        <div class="row">
+            <div class="col">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="row inscrits-stats">
+            <div class="col-md-6 col-xl-3">
+                <div class="card stat-widget stat-total">
+                    <div class="card-body">
+                        <div class="stat-label">
+                            <h5>Total inscrits</h5>
+                            <span class="stat-icon"><i class="fas fa-users"></i></span>
+                        </div>
+                        <h2>{{ total_inscrits }}</h2>
+                        <p>Toutes inscriptions confondues</p>
+                        <div class="progress">
+                            <div class="progress-bar bar-total" role="progressbar"
+                                style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <div class="card stat-widget stat-new">
+                    <div class="card-body">
+                        <div class="stat-label">
+                            <h5>Nouvelles</h5>
+                            <span class="stat-icon"><i class="fas fa-clock"></i></span>
+                        </div>
+                        <h2>{{ total_nouvelles }}</h2>
+                        <p>En attente de traitement</p>
+                        <div class="progress">
+                            <div class="progress-bar bar-new" role="progressbar"
+                                data-width="{{ pct_nouvelles }}"
+                                aria-valuenow="{{ total_nouvelles }}" aria-valuemin="0" aria-valuemax="{{ total_inscrits|default:1 }}"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <div class="card stat-widget stat-ok">
+                    <div class="card-body">
+                        <div class="stat-label">
+                            <h5>Confirmées</h5>
+                            <span class="stat-icon"><i class="fas fa-check"></i></span>
+                        </div>
+                        <h2>{{ total_confirmees }}</h2>
+                        <p>Inscriptions validées</p>
+                        <div class="progress">
+                            <div class="progress-bar bar-ok" role="progressbar"
+                                data-width="{{ pct_confirmees }}"
+                                aria-valuenow="{{ total_confirmees }}" aria-valuemin="0" aria-valuemax="{{ total_inscrits|default:1 }}"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <div class="card stat-widget stat-ko">
+                    <div class="card-body">
+                        <div class="stat-label">
+                            <h5>Refusées</h5>
+                            <span class="stat-icon"><i class="fas fa-times"></i></span>
+                        </div>
+                        <h2>{{ total_refusees }}</h2>
+                        <p>Inscriptions non retenues</p>
+                        <div class="progress">
+                            <div class="progress-bar bar-ko" role="progressbar"
+                                data-width="{{ pct_refusees }}"
+                                aria-valuenow="{{ total_refusees }}" aria-valuemin="0" aria-valuemax="{{ total_inscrits|default:1 }}"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Inscrits par formation</h5>
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Formation</th>
+                                        <th>Nombre d'inscrits</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for formation in formations_stats %}
+                                    <tr>
+                                        <td>{{ formation.titre }}</td>
+                                        <td><strong>{{ formation.nb_inscrits }}</strong></td>
+                                        <td>
+                                            <a href="?formation={{ formation.pk }}" class="btn btn-sm btn-outline-primary">
+                                                Voir
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="3" class="text-center">Aucune formation</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                            <h5 class="card-title mb-0">Liste des inscrits</h5>
+                            <form method="get" class="d-flex flex-wrap gap-2">
+                                <select name="formation" class="form-select form-select-sm" style="width:auto;">
+                                    <option value="">Toutes les formations</option>
+                                    {% for formation in formations_stats %}
+                                    <option value="{{ formation.pk }}" {% if selected_formation == formation.pk|stringformat:"s" %}selected{% endif %}>
+                                        {{ formation.titre }} ({{ formation.nb_inscrits }})
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                                <select name="statut" class="form-select form-select-sm" style="width:auto;">
+                                    <option value="">Tous les statuts</option>
+                                    {% for value, label in statut_choices %}
+                                    <option value="{{ value }}" {% if selected_statut == value %}selected{% endif %}>{{ label }}</option>
+                                    {% endfor %}
+                                </select>
+                                <button type="submit" class="btn btn-sm btn-primary">Filtrer</button>
+                                <a href="{% url 'formation:admin_inscriptions' %}" class="btn btn-sm btn-secondary">Réinitialiser</a>
+                            </form>
+                        </div>
+
+                        <table id="inscriptions-table" class="display" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Prénom</th>
+                                    <th>Email</th>
+                                    <th>Téléphone</th>
+                                    <th>Niveau</th>
+                                    <th>Formation(s)</th>
+                                    <th>Statut</th>
+                                    <th>Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for inscription in inscriptions %}
+                                <tr>
+                                    <td>{{ inscription.nom }}</td>
+                                    <td>{{ inscription.prenom|default:"—" }}</td>
+                                    <td>{{ inscription.email }}</td>
+                                    <td>{{ inscription.telephone }}</td>
+                                    <td>{{ inscription.get_niveau_display }}</td>
+                                    <td>
+                                        {% for formation in inscription.formations.all %}
+                                        <span class="badge bg-info text-dark">{{ formation.titre }}</span>
+                                        {% empty %}
+                                        —
+                                        {% endfor %}
+                                    </td>
+                                    <td>
+                                        {% if inscription.statut == 'nouvelle' %}
+                                        <span class="badge bg-warning text-dark">Nouvelle</span>
+                                        {% elif inscription.statut == 'confirmee' %}
+                                        <span class="badge bg-success">Confirmée</span>
+                                        {% else %}
+                                        <span class="badge bg-danger">Refusée</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ inscription.created_at|date:"d/m/Y H:i" }}</td>
+                                    <td>
+                                        <form method="post" action="{% url 'formation:admin_inscription_statut' inscription.pk %}" class="d-flex gap-1">
+                                            {% csrf_token %}
+                                            <select name="statut" class="form-select form-select-sm">
+                                                {% for value, label in statut_choices %}
+                                                <option value="{{ value }}" {% if inscription.statut == value %}selected{% endif %}>{{ label }}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <button type="submit" class="btn btn-sm btn-primary" title="Mettre à jour">OK</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="9" class="text-center">Aucun inscrit</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock content %}
+
+{% block script %}
+<script>
+    $(document).ready(function () {
+        $('.inscrits-stats .progress-bar[data-width]').each(function () {
+            var width = $(this).attr('data-width') || 0;
+            $(this).css('width', width + '%');
+        });
+        $('#inscriptions-table').DataTable({
+            order: [[7, 'desc']]
+        });
+    });
+</script>
+{% endblock script %}

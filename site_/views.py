@@ -1,5 +1,12 @@
 from django.shortcuts import render
 
+from devis.views import demande_devis
+from temoignage.views import donner_avis as temoignage_donner_avis
+
+
+def dashboard(request):
+    return render(request, 'backend/dashboard.html')
+
 
 def index(request):
     return render(request, 'index.html')
@@ -26,4 +33,8 @@ def apropos(request):
 
 
 def demande_avis(request):
-    return render(request, 'pages/demande_avis.html')
+    return demande_devis(request)
+
+
+def donner_avis(request):
+    return temoignage_donner_avis(request)

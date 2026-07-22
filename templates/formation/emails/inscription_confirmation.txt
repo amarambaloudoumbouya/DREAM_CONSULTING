@@ -1,0 +1,20 @@
+Bonjour {{ inscription.prenom }} {{ inscription.nom }},
+
+Nous avons bien reçu votre demande d'inscription aux formations de {{ site_name }}.
+
+Récapitulatif :
+- Niveau : {{ inscription.get_niveau_display }}
+{% if formations %}
+- Formation(s) :
+{% for formation in formations %}  • {{ formation.titre }}
+{% endfor %}{% endif %}
+{% if inscription.message %}
+- Message : {{ inscription.message }}
+{% endif %}
+
+Notre équipe vous recontactera sous 24 à 48 h pour confirmer les dates et les modalités.
+
+Cordialement,
+L'équipe {{ site_name }}
+Tél. : +224 611 73 02 93
+Email : dreamconsulting224@gmail.com

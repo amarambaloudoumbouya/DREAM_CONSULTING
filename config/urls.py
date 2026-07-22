@@ -23,4 +23,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('site_.urls')),
     path('accounts/', include('accounts.urls')),
+    path('formations/', include('formation.urls')),
+    path('devis/', include('devis.urls')),
+    path('partenaires/', include('partenaire.urls')),
+    path('temoignages/', include('temoignage.urls')),
+    path('collaborateurs/', include('collaborateur.urls')),
 ]+static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

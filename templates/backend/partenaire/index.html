@@ -1,0 +1,223 @@
+{% extends 'backend/dashboard.html' %}
+{% block title %}
+<title>Dream consulting com - Liste des partenaires</title>
+{% endblock title %}
+
+{% block style %}
+{% endblock style %}
+
+{% block content %}
+<div class="page-content">
+    <div class="main-wrapper">
+
+        {% if messages %}
+        <div class="row">
+            <div class="col">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Ajout d'un partenaire</h5>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#add-partenaire-modal">
+                            Ajouter un partenaire
+                        </button>
+
+                        <div class="modal fade" id="add-partenaire-modal" tabindex="-1"
+                            aria-labelledby="addPartenaireModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <form method="post" action="{% url 'partenaire:admin_create' %}"
+                                        enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="addPartenaireModalLabel">Nouveau partenaire</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            {% for field in create_form %}
+                                            <div class="mb-3{% if field.name == 'is_active' %} form-check{% endif %}">
+                                                {% if field.name == 'is_active' %}
+                                                {{ field }}
+                                                <label for="{{ field.id_for_label }}" class="form-check-label">{{ field.label }}</label>
+                                                {% else %}
+                                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                                {{ field }}
+                                                {% endif %}
+                                                {% if field.errors %}
+                                                <div class="text-danger small">{{ field.errors|striptags }}</div>
+                                                {% endif %}
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Fermer</button>
+                                            <button type="submit" class="btn btn-primary">Ajouter</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Liste des partenaires</h5>
+                        <table id="partenaires-table" class="display" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Logo</th>
+                                    <th>Nom</th>
+                                    <th>Site web</th>
+                                    <th>Ordre</th>
+                                    <th>Actif</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for partenaire in partenaires %}
+                                <tr>
+                                    <td>
+                                        {% if partenaire.logo_url %}
+                                        <img src="{{ partenaire.logo_url }}" alt="{{ partenaire.nom }}"
+                                            style="max-height:40px;max-width:80px;object-fit:contain;">
+                                        {% else %}
+                                        —
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ partenaire.nom }}</td>
+                                    <td>
+                                        {% if partenaire.site_web %}
+                                        <a href="{{ partenaire.site_web }}" target="_blank" rel="noopener">{{ partenaire.site_web }}</a>
+                                        {% else %}
+                                        —
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ partenaire.ordre }}</td>
+                                    <td>
+                                        {% if partenaire.is_active %}
+                                        <span class="badge bg-success">Oui</span>
+                                        {% else %}
+                                        <span class="badge bg-secondary">Non</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal"
+                                            data-bs-target="#edit-partenaire-modal-{{ partenaire.pk }}" title="Modifier">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
+                                            data-bs-target="#delete-partenaire-modal-{{ partenaire.pk }}" title="Supprimer">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center">Aucun partenaire</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% for pk, form in edit_forms.items %}
+        <div class="modal fade" id="edit-partenaire-modal-{{ pk }}" tabindex="-1"
+            aria-labelledby="editPartenaireModalLabel{{ pk }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form method="post" action="{% url 'partenaire:admin_update' pk %}"
+                        enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editPartenaireModalLabel{{ pk }}">Modifier le partenaire</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            {% for field in form %}
+                            <div class="mb-3{% if field.name == 'is_active' %} form-check{% endif %}">
+                                {% if field.name == 'is_active' %}
+                                {{ field }}
+                                <label for="{{ field.id_for_label }}" class="form-check-label">{{ field.label }}</label>
+                                {% else %}
+                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                {{ field }}
+                                {% endif %}
+                                {% if field.errors %}
+                                <div class="text-danger small">{{ field.errors|striptags }}</div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                            <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        {% for partenaire in partenaires %}
+        <div class="modal fade" id="delete-partenaire-modal-{{ partenaire.pk }}" tabindex="-1"
+            aria-labelledby="deletePartenaireModalLabel{{ partenaire.pk }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form method="post" action="{% url 'partenaire:admin_delete' partenaire.pk %}">
+                        {% csrf_token %}
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deletePartenaireModalLabel{{ partenaire.pk }}">Supprimer le partenaire</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Voulez-vous vraiment supprimer <strong>{{ partenaire.nom }}</strong> ?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                            <button type="submit" class="btn btn-danger">Supprimer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+{% endblock content %}
+
+{% block script %}
+<script>
+    $(document).ready(function () {
+        $('#partenaires-table').DataTable();
+        var openModalId = "{{ open_modal|default:'' }}";
+        if (openModalId) {
+            var modalEl = document.getElementById(openModalId);
+            if (modalEl) {
+                new bootstrap.Modal(modalEl).show();
+            }
+        }
+    });
+</script>
+{% endblock script %}

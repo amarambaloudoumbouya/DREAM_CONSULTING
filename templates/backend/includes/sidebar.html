@@ -1,0 +1,82 @@
+{% load static %}
+<div class="page-sidebar">
+    <ul class="list-unstyled accordion-menu">
+      <li class="sidebar-title">
+        Menu principal
+      </li>
+      <li class="active-page">
+        <a href="{% url 'site_:dashboard' %}"><i data-feather="home"></i>Tableau de bord</a>
+      </li>
+
+      <li class="sidebar-title">
+        Site
+      </li>
+      <li>
+        <a href=""><i data-feather="briefcase"></i>Dream consulting<i class="fas fa-chevron-right dropdown-icon"></i></a>
+        <ul class="">
+          <li><a href=""><i class="far fa-info-circle"></i>A propos</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href=""><i data-feather="image"></i>Sliders<i class="fas fa-chevron-right dropdown-icon"></i></a>
+        <ul class="">
+          <li><a href=""><i class="far fa-images"></i>Liste des sliders</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href=""><i data-feather="film"></i>Medias<i class="fas fa-chevron-right dropdown-icon"></i></a>
+        <ul class="">
+          <li><a href=""><i class="far fa-image"></i>Photographies</a></li>
+          <li><a href=""><i class="fas fa-palette"></i>Branding</a></li>
+          <li><a href=""><i class="far fa-play-circle"></i>Vidéos</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href=""><i data-feather="users"></i>Nos collaborateurs<i class="fas fa-chevron-right dropdown-icon"></i></a>
+        <ul class="">
+          <li><a href="{% url 'collaborateur:admin_list' %}"><i class="far fa-address-card"></i>Liste des collaborateurs</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href=""><i data-feather="link"></i>Nos partenaires<i class="fas fa-chevron-right dropdown-icon"></i></a>
+        <ul class="">
+          <li><a href="{% url 'partenaire:admin_list' %}"><i class="far fa-handshake"></i>Liste des partenaires</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href=""><i data-feather="message-circle"></i>Les temoignages<i class="fas fa-chevron-right dropdown-icon"></i></a>
+        <ul class="">
+          <li><a href="{% url 'temoignage:admin_list' %}"><i class="far fa-comments"></i>Liste des temoignages</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href=""><i data-feather="book-open"></i>Formations<i class="fas fa-chevron-right dropdown-icon"></i></a>
+        <ul class="">
+          <li><a href="{% url 'formation:admin_list' %}"><i class="far fa-list-alt"></i>Liste des formations</a></li>
+          <li><a href="{% url 'formation:admin_inscriptions' %}"><i class="far fa-user-circle"></i>Liste des inscrits</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href=""><i data-feather="file-text"></i>Demandes de devis<i class="fas fa-chevron-right dropdown-icon"></i></a>
+        <ul class="">
+          <li><a href="{% url 'devis:admin_list' %}"><i class="far fa-file-alt"></i>Liste des demandes de devis</a></li>
+        </ul>
+      </li>
+      <li class="sidebar-title">
+        Utilisateurs
+      </li>
+      <li>
+        <a href=""><i data-feather="user-check"></i>Notre équipe<i class="fas fa-chevron-right dropdown-icon"></i></a>
+        <ul class="">
+          <li><a href="{% url 'accounts:membres_list' %}"><i class="far fa-id-badge"></i>Liste des membres</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href=""><i data-feather="user"></i>Utilisateurs<i class="fas fa-chevron-right dropdown-icon"></i></a>
+        <ul class="">
+          <li><a href="{% url 'accounts:users_list' %}"><i class="far fa-user-circle"></i>Liste des utilisateurs</a></li>
+        </ul>
+      </li>
+
+    </ul>
+</div>

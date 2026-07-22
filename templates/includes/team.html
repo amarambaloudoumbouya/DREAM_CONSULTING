@@ -5,59 +5,40 @@
         <div class="row">
             <div class="col-xl-6 col-lg-6 col-md-7">
                 <div class="section-title">
-                    <h2 class="visible-slowly-right">Découvrez notre équipe de <span>talentueux</span> professionnels</h2>                        
+                    <h2 class="visible-slowly-right">Découvrez notre équipe de <span>talentueux</span> professionnels</h2>
                 </div>
                 <p class="wow fadeInUp animated" data-wow-delay=".4s">Photographes, vidéastes et organisateurs passionnés qui mettent tout leur savoir-faire au service de vos moments.</p>
             </div>
             <div class="col-xl-6 col-lg-6 col-md-5 text-md-end">
-                <a href="#" class="bordered-btn">Notre Équipe <i class="fa-light fa-arrow-right"></i></a>
+                <a href="{% url 'site_:apropos' %}" class="bordered-btn">Notre Équipe <i class="fa-light fa-arrow-right"></i></a>
             </div>
         </div>
         <div class="row mt-30">
-            <div class="col-xl-3 col-lg-3 col-md-6 wow fadeInUp animated" data-wow-delay="200ms">
-                <div class="single-team-item">
-                    <div class="team-img">
-                        <img src="{% static 'front/assets/img/team/1.jpg' %}" alt="">
+            <div class="col-12">
+                {% if equipe_membres %}
+                <div class="team-slider owl-carousel">
+                    {% for membre in equipe_membres %}
+                    <div class="single-team-item">
+                        <div class="team-img">
+                            {% if membre.image_url %}
+                            <img src="{{ membre.image_url }}" alt="{{ membre.full_name }}">
+                            {% else %}
+                            <img src="{% static 'front/assets/img/team/1.jpg' %}" alt="{{ membre.full_name }}">
+                            {% endif %}
+                        </div>
+                        <div class="team-info">
+                            <span>{{ membre.fonction_poste|default:"Membre de l'équipe" }}</span>
+                            <h5>{{ membre.full_name }}</h5>
+                        </div>
                     </div>
-                    <div class="team-info">
-                        <span>Photographe</span>
-                        <h5>Benjamin Scott</h5>
-                    </div>
+                    {% endfor %}
                 </div>
-            </div>
-            <div class="col-xl-3 col-lg-3 col-md-6 wow fadeInUp animated" data-wow-delay="400ms">
-                <div class="single-team-item">
-                    <div class="team-img">
-                        <img src="{% static 'front/assets/img/team/2.jpg' %}" alt="">
-                    </div>
-                    <div class="team-info">
-                        <span>Vidéaste</span>
-                        <h5>Anna Hallberg</h5>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-lg-3 col-md-6 wow fadeInUp animated" data-wow-delay="600ms">
-                <div class="single-team-item">
-                    <div class="team-img">
-                        <img src="{% static 'front/assets/img/team/3.jpg' %}" alt="">
-                    </div>
-                    <div class="team-info">
-                        <span>Directeur Artistique</span>
-                        <h5>Deniel Lee</h5>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-lg-3 col-md-6 wow fadeInUp animated" data-wow-delay="800ms">
-                <div class="single-team-item">
-                    <div class="team-img">
-                        <img src="{% static 'front/assets/img/team/4.jpg' %}" alt="">
-                    </div>
-                    <div class="team-info">
-                        <span>Organisatrice d'Événements</span>
-                        <h5>Sophia Ramirez</h5>
-                    </div>
-                </div>
+                {% else %}
+                <p class="text-center mb-0">Notre équipe sera bientôt présentée ici.</p>
+                {% endif %}
             </div>
         </div>
     </div>
- </div> 
+</div>
+
+

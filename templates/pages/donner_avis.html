@@ -1,0 +1,198 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block title %}
+    <title>Donner un avis | Dream Consulting Com</title>
+{% endblock title %}
+
+{% block styles %}
+<style>
+    .avis-section {
+        background: linear-gradient(160deg, #f7f6fb 0%, #ffffff 45%, #fff7ec 100%);
+    }
+    .avis-intro h2 span {
+        color: #F7941D;
+    }
+    .avis-intro p {
+        font-size: 16px;
+        line-height: 1.7;
+        color: #666;
+    }
+    .avis-points {
+        list-style: none;
+        padding: 0;
+        margin: 28px 0 0;
+    }
+    .avis-points li {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 14px;
+        font-size: 15px;
+        color: #1B1464;
+    }
+    .avis-points li i {
+        color: #F7941D;
+        font-size: 18px;
+        margin-top: 2px;
+    }
+    .avis-form-wrap {
+        background: #fff;
+        padding: 40px 36px;
+        box-shadow: 0 20px 50px rgba(27, 20, 100, .10);
+        border-radius: 4px;
+        border-top: 4px solid #F7941D;
+    }
+    .avis-form-wrap h5 {
+        font-size: 26px;
+        color: #1B1464;
+        margin-bottom: 8px;
+    }
+    .avis-form-wrap .form-desc {
+        font-size: 14px;
+        color: #777;
+        margin-bottom: 28px;
+    }
+    .avis-form-wrap label {
+        font-size: 14px;
+        font-weight: 500;
+        color: #1B1464;
+        margin-bottom: 8px;
+        display: block;
+    }
+    .avis-form-wrap .form-control,
+    .avis-form-wrap .form-select {
+        border-color: #EBEAF5;
+        padding: 12px 16px;
+        margin-bottom: 8px;
+        color: #555;
+        width: 100%;
+    }
+    .avis-form-wrap .nice-select {
+        width: 100%;
+        float: none;
+        margin-bottom: 8px;
+        border-color: #EBEAF5;
+    }
+    .avis-form-wrap .theme-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #F7941D;
+        color: #fff;
+        font-size: 16px;
+        font-weight: 600;
+        padding: 16px 28px;
+        border: 1px solid #F7941D;
+        border-radius: 7px;
+        cursor: pointer;
+        transition: .3s;
+    }
+    .avis-form-wrap .theme-btn:hover {
+        background: #1B1464;
+        border-color: #1B1464;
+        color: #fff;
+    }
+    @media (max-width: 575px) {
+        .avis-form-wrap {
+            padding: 28px 20px;
+        }
+        .avis-form-wrap .theme-btn {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock styles %}
+
+{% block content %}
+<div class="breadcrumb-area faq">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 text-center">
+                <div class="breadcrumb-title">
+                    <h1>Donner un avis</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="avis-section section-padding">
+    <div class="container">
+        <div class="row align-items-start">
+            <div class="col-xl-5 col-lg-5 mb-40">
+                <div class="avis-intro">
+                    <div class="section-title">
+                        <h6>Votre retour compte</h6>
+                        <h2>Partagez votre <span>expérience</span></h2>
+                    </div>
+                    <p>Vous avez fait appel à Dream Consulting Com ? Dites-nous ce que vous avez pensé de nos services. Votre témoignage aide d'autres clients et nous permet de progresser.</p>
+                    <ul class="avis-points">
+                        <li><i class="las la-check-circle"></i><span>Avis modéré avant publication</span></li>
+                        <li><i class="las la-check-circle"></i><span>Photo et note optionnelles</span></li>
+                        <li><i class="las la-check-circle"></i><span>Réponse sous quelques jours</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-xl-7 col-lg-7">
+                <div class="avis-form-wrap">
+                    <h5>Formulaire d'avis</h5>
+                    <p class="form-desc">Remplissez ce formulaire. Votre avis sera publié après validation.</p>
+
+                    {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}" role="alert" style="margin-bottom:16px;">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+
+                    <form method="post" action="{% url 'site_:donner_avis' %}" enctype="multipart/form-data" novalidate>
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.prenom.id_for_label }}">{{ form.prenom.label }}</label>
+                                {{ form.prenom }}
+                                {% if form.prenom.errors %}<small class="text-danger">{{ form.prenom.errors|striptags }}</small>{% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.nom.id_for_label }}">{{ form.nom.label }}</label>
+                                {{ form.nom }}
+                                {% if form.nom.errors %}<small class="text-danger">{{ form.nom.errors|striptags }}</small>{% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+                                {{ form.email }}
+                                {% if form.email.errors %}<small class="text-danger">{{ form.email.errors|striptags }}</small>{% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.fonction.id_for_label }}">{{ form.fonction.label }}</label>
+                                {{ form.fonction }}
+                                {% if form.fonction.errors %}<small class="text-danger">{{ form.fonction.errors|striptags }}</small>{% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.note.id_for_label }}">{{ form.note.label }}</label>
+                                {{ form.note }}
+                                {% if form.note.errors %}<small class="text-danger">{{ form.note.errors|striptags }}</small>{% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.photo.id_for_label }}">{{ form.photo.label }}</label>
+                                {{ form.photo }}
+                                {% if form.photo.errors %}<small class="text-danger">{{ form.photo.errors|striptags }}</small>{% endif %}
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="{{ form.avis.id_for_label }}">{{ form.avis.label }}</label>
+                                {{ form.avis }}
+                                {% if form.avis.errors %}<small class="text-danger">{{ form.avis.errors|striptags }}</small>{% endif %}
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="theme-btn">Envoyer mon avis</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Connexion - Dream consulting com">
+        <meta name="keywords" content="admin,dashboard">
+        <meta name="author" content="Dream consulting com">
+
+        <title>Dream consulting com - Connexion</title>
+
+        <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,700,800&display=swap" rel="stylesheet">
+        <link href="{% static 'back/assets/plugins/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+        <link href="{% static 'back/assets/plugins/font-awesome/css/all.min.css' %}" rel="stylesheet">
+        <link href="{% static 'back/assets/plugins/perfectscroll/perfect-scrollbar.css' %}" rel="stylesheet">
+
+        <link href="{% static 'back/assets/css/main.min.css' %}" rel="stylesheet">
+        <link href="{% static 'back/assets/css/custom.css' %}" rel="stylesheet">
+    </head>
+    <body class="login-page">
+        <div class='loader'>
+            <div class='spinner-grow text-primary' role='status'>
+              <span class='sr-only'>Loading...</span>
+            </div>
+          </div>
+        <div class="container">
+            <div class="row justify-content-md-center">
+                <div class="col-md-12 col-lg-4">
+                    <div class="card login-box-container">
+                        <div class="card-body">
+                            <div class="authent-logo">
+                                <img src="{% static 'back/assets/images/logo@2x.png' %}" alt="Dream consulting com">
+                            </div>
+                            <div class="authent-text">
+                                <p>Welcome to Dream consulting com</p>
+                                <p>Veuillez vous connecter à votre compte.</p>
+                            </div>
+
+                            {% if form.non_field_errors %}
+                            <div class="alert alert-danger" role="alert">
+                                {% for error in form.non_field_errors %}
+                                {{ error }}
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+
+                            <form method="post" action="{% url 'accounts:login' %}" novalidate>
+                                {% csrf_token %}
+                                {% if next %}
+                                <input type="hidden" name="next" value="{{ next }}">
+                                {% endif %}
+
+                                <div class="mb-3">
+                                    <div class="form-floating">
+                                        <input type="email" class="form-control{% if form.username.errors %} is-invalid{% endif %}"
+                                            id="id_username" name="username" placeholder="name@example.com"
+                                            value="{{ form.username.value|default:'' }}" required autofocus>
+                                        <label for="id_username">Adresse email</label>
+                                      </div>
+                                      {% if form.username.errors %}
+                                      <div class="text-danger small mt-1">{{ form.username.errors|striptags }}</div>
+                                      {% endif %}
+                                </div>
+                                <div class="mb-3">
+                                    <div class="form-floating">
+                                        <input type="password" class="form-control{% if form.password.errors %} is-invalid{% endif %}"
+                                            id="id_password" name="password" placeholder="Password" required>
+                                        <label for="id_password">Mot de passe</label>
+                                      </div>
+                                      {% if form.password.errors %}
+                                      <div class="text-danger small mt-1">{{ form.password.errors|striptags }}</div>
+                                      {% endif %}
+                                </div>
+                                <div class="mb-3 form-check">
+                                  <input type="checkbox" class="form-check-input" id="id_remember" name="remember">
+                                  <label class="form-check-label" for="id_remember">Se souvenir de moi</label>
+                                </div>
+                                <div class="d-grid">
+                                <button type="submit" class="btn btn-info m-b-xs">Se connecter</button>
+                            </div>
+                              </form>
+                              <div class="authent-reg">
+                                  <p><a href="#">Mot de passe oublié</a></p>
+                              </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="{% static 'back/assets/plugins/jquery/jquery-3.4.1.min.js' %}"></script>
+        <script src="https://unpkg.com/@popperjs/core@2"></script>
+        <script src="{% static 'back/assets/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+        <script src="https://unpkg.com/feather-icons"></script>
+        <script src="{% static 'back/assets/plugins/perfectscroll/perfect-scrollbar.min.js' %}"></script>
+        <script src="{% static 'back/assets/js/main.min.js' %}"></script>
+    </body>
+</html>

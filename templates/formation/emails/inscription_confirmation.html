@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <title>Confirmation d'inscription</title>
+</head>
+<body style="margin:0;padding:0;background:#f4f3fa;font-family:Arial,Helvetica,sans-serif;color:#333;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f3fa;padding:30px 12px;">
+        <tr>
+            <td align="center">
+                <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:8px;overflow:hidden;max-width:600px;width:100%;">
+                    <tr>
+                        <td style="background:#1B1464;padding:24px 28px;color:#fff;">
+                            <h1 style="margin:0;font-size:22px;">{{ site_name }}</h1>
+                            <p style="margin:8px 0 0;color:#F7941D;font-size:14px;">Confirmation d'inscription</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:28px;">
+                            <p style="margin:0 0 16px;font-size:16px;">
+                                Bonjour <strong>{{ inscription.prenom }} {{ inscription.nom }}</strong>,
+                            </p>
+                            <p style="margin:0 0 16px;font-size:15px;line-height:1.6;">
+                                Nous avons bien reçu votre demande d'inscription. Merci pour votre confiance.
+                            </p>
+
+                            <table width="100%" cellpadding="0" cellspacing="0" style="background:#f7f6fb;border-radius:6px;margin:20px 0;">
+                                <tr>
+                                    <td style="padding:18px 20px;">
+                                        <p style="margin:0 0 10px;font-size:14px;color:#1B1464;font-weight:bold;">Récapitulatif</p>
+                                        <p style="margin:0 0 8px;font-size:14px;"><strong>Niveau :</strong> {{ inscription.get_niveau_display }}</p>
+                                        {% if formations %}
+                                        <p style="margin:0 0 6px;font-size:14px;"><strong>Formation(s) :</strong></p>
+                                        <ul style="margin:0;padding-left:18px;font-size:14px;line-height:1.6;">
+                                            {% for formation in formations %}
+                                            <li>{{ formation.titre }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                        {% endif %}
+                                        {% if inscription.message %}
+                                        <p style="margin:12px 0 0;font-size:14px;"><strong>Message :</strong> {{ inscription.message }}</p>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <p style="margin:0 0 16px;font-size:15px;line-height:1.6;">
+                                Notre équipe vous recontactera sous <strong>24 à 48 h</strong> pour confirmer les dates et les modalités de votre parcours.
+                            </p>
+                            <p style="margin:0;font-size:15px;line-height:1.6;">
+                                Cordialement,<br>
+                                <strong>L'équipe {{ site_name }}</strong>
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="background:#f7f6fb;padding:16px 28px;font-size:13px;color:#666;line-height:1.6;">
+                            Tél. : +224 611 73 02 93<br>
+                            Email : dreamconsulting224@gmail.com
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

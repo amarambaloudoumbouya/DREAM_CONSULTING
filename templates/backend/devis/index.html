@@ -1,0 +1,284 @@
+{% extends 'backend/dashboard.html' %}
+{% block title %}
+<title>Dream consulting com - Demandes de devis</title>
+{% endblock title %}
+
+{% block style %}
+<style>
+    .devis-stats .stat-label {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 8px;
+    }
+    .devis-stats .stat-label h5 {
+        margin: 0;
+        font-size: 13px;
+        font-weight: 500;
+        color: #8a8a8a;
+        text-transform: uppercase;
+        letter-spacing: .4px;
+    }
+    .devis-stats .stat-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .devis-stats h2 {
+        margin: 0 0 6px;
+        font-size: 32px;
+        font-weight: 600;
+        color: #2c2c2c;
+    }
+    .devis-stats p {
+        margin: 0 0 12px;
+        font-size: 12px;
+        color: #9a9a9a;
+    }
+    .devis-stats .progress { height: 6px; border-radius: 4px; background: #eef0f4; }
+    .devis-stats .progress-bar { border-radius: 4px; width: 0; }
+    .stat-total .stat-icon { background: rgba(27,20,100,.1); color: #1B1464; }
+    .stat-new .stat-icon { background: rgba(247,148,29,.15); color: #F7941D; }
+    .stat-analyse .stat-icon { background: rgba(13,110,253,.12); color: #0d6efd; }
+    .stat-ok .stat-icon { background: rgba(40,167,69,.12); color: #28a745; }
+    .bar-total { background: #1B1464; }
+    .bar-new { background: #F7941D; }
+    .bar-analyse { background: #0d6efd; }
+    .bar-ok { background: #28a745; }
+</style>
+{% endblock style %}
+
+{% block content %}
+<div class="page-content">
+    <div class="main-wrapper">
+
+        {% if messages %}
+        <div class="row">
+            <div class="col">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="row devis-stats">
+            <div class="col-md-6 col-xl-3">
+                <div class="card stat-widget stat-total">
+                    <div class="card-body">
+                        <div class="stat-label">
+                            <h5>Total demandes</h5>
+                            <span class="stat-icon"><i class="fas fa-file-alt"></i></span>
+                        </div>
+                        <h2>{{ total }}</h2>
+                        <p>Toutes demandes confondues</p>
+                        <div class="progress">
+                            <div class="progress-bar bar-total" style="width:100%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <div class="card stat-widget stat-new">
+                    <div class="card-body">
+                        <div class="stat-label">
+                            <h5>Nouvelles</h5>
+                            <span class="stat-icon"><i class="fas fa-clock"></i></span>
+                        </div>
+                        <h2>{{ total_nouvelles }}</h2>
+                        <p>À traiter</p>
+                        <div class="progress">
+                            <div class="progress-bar bar-new" data-width="{{ pct_nouvelles }}"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <div class="card stat-widget stat-analyse">
+                    <div class="card-body">
+                        <div class="stat-label">
+                            <h5>En analyse</h5>
+                            <span class="stat-icon"><i class="fas fa-search"></i></span>
+                        </div>
+                        <h2>{{ total_analyse }}</h2>
+                        <p>En cours d'étude</p>
+                        <div class="progress">
+                            <div class="progress-bar bar-analyse" data-width="{{ pct_analyse }}"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <div class="card stat-widget stat-ok">
+                    <div class="card-body">
+                        <div class="stat-label">
+                            <h5>Traitées</h5>
+                            <span class="stat-icon"><i class="fas fa-check"></i></span>
+                        </div>
+                        <h2>{{ total_traitees }}</h2>
+                        <p>Retour envoyé / clôturées</p>
+                        <div class="progress">
+                            <div class="progress-bar bar-ok" data-width="{{ pct_traitees }}"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                            <h5 class="card-title mb-0">Liste des demandes de devis</h5>
+                            <form method="get" class="d-flex gap-2">
+                                <select name="statut" class="form-select form-select-sm" style="width:auto;">
+                                    <option value="">Tous les statuts</option>
+                                    {% for value, label in statut_choices %}
+                                    <option value="{{ value }}" {% if selected_statut == value %}selected{% endif %}>{{ label }}</option>
+                                    {% endfor %}
+                                </select>
+                                <button type="submit" class="btn btn-sm btn-primary">Filtrer</button>
+                                <a href="{% url 'devis:admin_list' %}" class="btn btn-sm btn-secondary">Réinitialiser</a>
+                            </form>
+                        </div>
+
+                        <table id="devis-table" class="display" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Client</th>
+                                    <th>Contact</th>
+                                    <th>Événement</th>
+                                    <th>Date</th>
+                                    <th>Prestations</th>
+                                    <th>Statut</th>
+                                    <th>Reçu le</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for demande in demandes %}
+                                <tr>
+                                    <td>{{ demande.nom_complet }}</td>
+                                    <td>
+                                        {{ demande.email }}<br>
+                                        <small>{{ demande.telephone }}</small>
+                                    </td>
+                                    <td>
+                                        {{ demande.get_type_evenement_display }}<br>
+                                        <small>{{ demande.lieu }}</small>
+                                    </td>
+                                    <td>
+                                        {{ demande.date_evenement|date:"d/m/Y" }}<br>
+                                        <small>{{ demande.heure|time:"H:i" }}</small>
+                                    </td>
+                                    <td>
+                                        {% for p in demande.get_prestations_display %}
+                                        <span class="badge bg-info text-dark">{{ p }}</span>
+                                        {% empty %}—{% endfor %}
+                                    </td>
+                                    <td>
+                                        {% if demande.statut == 'nouvelle' %}
+                                        <span class="badge bg-warning text-dark">Nouvelle</span>
+                                        {% elif demande.statut == 'en_analyse' %}
+                                        <span class="badge bg-primary">En analyse</span>
+                                        {% elif demande.statut == 'traitee' %}
+                                        <span class="badge bg-success">Traitée</span>
+                                        {% else %}
+                                        <span class="badge bg-danger">Refusée</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ demande.created_at|date:"d/m/Y H:i" }}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#retour-modal-{{ demande.pk }}">
+                                            Analyser / Retour
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="8" class="text-center">Aucune demande</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% for demande in demandes %}
+        <div class="modal fade" id="retour-modal-{{ demande.pk }}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <form method="post" action="{% url 'devis:admin_retour' demande.pk %}">
+                        {% csrf_token %}
+                        <div class="modal-header">
+                            <h5 class="modal-title">Retour — {{ demande.nom_complet }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="mb-3">
+                                <strong>Email :</strong> {{ demande.email }} |
+                                <strong>Tél :</strong> {{ demande.telephone }}<br>
+                                <strong>Événement :</strong> {{ demande.get_type_evenement_display }} —
+                                {{ demande.date_evenement|date:"d/m/Y" }} à {{ demande.heure|time:"H:i" }} —
+                                {{ demande.lieu }}
+                            </p>
+                            <div class="mb-3">
+                                <label class="form-label" for="statut-{{ demande.pk }}">Statut</label>
+                                <select class="form-select" name="statut" id="statut-{{ demande.pk }}" required>
+                                    {% for value, label in statut_choices %}
+                                    <option value="{{ value }}" {% if demande.statut == value %}selected{% endif %}>{{ label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="retour-{{ demande.pk }}">Retour au client</label>
+                                <textarea class="form-control" name="retour" id="retour-{{ demande.pk }}" rows="5"
+                                    placeholder="Votre retour / proposition au client…" required>{{ demande.retour }}</textarea>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="envoyer_email" value="on"
+                                    id="envoyer-{{ demande.pk }}" checked>
+                                <label class="form-check-label" for="envoyer-{{ demande.pk }}">
+                                    Envoyer le retour par email au client
+                                </label>
+                            </div>
+                            {% if demande.retour_envoye_at %}
+                            <small class="text-muted">Dernier retour envoyé le {{ demande.retour_envoye_at|date:"d/m/Y H:i" }}</small>
+                            {% endif %}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                            <button type="submit" class="btn btn-primary">Enregistrer / Envoyer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+{% endblock content %}
+
+{% block script %}
+<script>
+    $(document).ready(function () {
+        $('.devis-stats .progress-bar[data-width]').each(function () {
+            $(this).css('width', ($(this).attr('data-width') || 0) + '%');
+        });
+        $('#devis-table').DataTable({
+            order: [[6, 'desc']]
+        });
+    });
+</script>
+{% endblock script %}

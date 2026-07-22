@@ -33,6 +33,166 @@
         position: relative;
         z-index: 2;
     }
+    /* Cadre devis : hauteur auto + contenu contenu */
+    #quote-page.quotation-section {
+        height: auto;
+        min-height: 0;
+        overflow: visible;
+        padding-top: 90px;
+        padding-bottom: 90px;
+    }
+    #quote-page .quotation-intro-wrap {
+        padding-right: 40px;
+        padding-top: 10px;
+    }
+    #quote-page .quotation-wrap {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        overflow-x: clip;
+        overflow-y: visible;
+        padding: 36px 32px;
+    }
+    #quote-page .quotation-inner {
+        width: 100%;
+        max-width: 100%;
+    }
+    #quote-page .quotation-wrap .row {
+        margin-left: -10px;
+        margin-right: -10px;
+    }
+    #quote-page .quotation-wrap .row > [class*="col-"] {
+        padding-left: 10px;
+        padding-right: 10px;
+        min-width: 0;
+        margin-bottom: 14px;
+    }
+    #quote-page .quotation-wrap label {
+        display: block;
+        margin-bottom: 6px;
+    }
+    #quote-page .quotation-wrap .form-control,
+    #quote-page .quotation-wrap input,
+    #quote-page .quotation-wrap select {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    #quote-page .quotation-wrap .quotation-item {
+        width: 100%;
+        max-width: 100%;
+        position: relative;
+    }
+    .prestation-checkboxes {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px 12px;
+        margin-top: 4px;
+        width: 100%;
+        max-width: 100%;
+    }
+    .prestation-checkboxes .form-check {
+        margin-bottom: 0 !important;
+        min-height: 0 !important;
+        padding-left: 0 !important;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        min-width: 0;
+    }
+    .prestation-checkboxes input[type="checkbox"] {
+        width: 12px !important;
+        height: 12px !important;
+        min-width: 12px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border-radius: 50% !important;
+        border: 1.5px solid #9a96b8 !important;
+        background-color: #fff !important;
+        flex-shrink: 0;
+        float: none;
+        cursor: pointer;
+        appearance: none;
+        -webkit-appearance: none;
+        box-shadow: none !important;
+    }
+    .prestation-checkboxes input[type="checkbox"]:checked {
+        background-color: #F7941D !important;
+        border-color: #F7941D !important;
+        background-image: none !important;
+        box-shadow: inset 0 0 0 2px #fff !important;
+    }
+    .prestation-checkboxes input[type="checkbox"]:focus {
+        box-shadow: none !important;
+        border-color: #F7941D !important;
+    }
+    .prestation-checkboxes .form-check-label {
+        font-size: 13px !important;
+        font-weight: 400 !important;
+        line-height: 1.2 !important;
+        margin-bottom: 0 !important;
+        cursor: pointer;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+    .quotation-wrap .theme-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: auto;
+        max-width: 100%;
+        background: #F7941D;
+        color: #fff;
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 20px;
+        padding: 18px 30px;
+        border: 1px solid #F7941D;
+        border-radius: 7px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    .quotation-wrap .theme-btn:hover {
+        background: #1B1464;
+        border-color: #1B1464;
+        color: #fff;
+    }
+    .quotation-wrap .nice-select {
+        width: 100%;
+        max-width: 100%;
+        float: none;
+        box-sizing: border-box;
+    }
+    .quotation-wrap .nice-select .list {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    @media (max-width: 1199px) {
+        #quote-page .quotation-wrap {
+            padding: 28px 22px;
+        }
+    }
+    @media (max-width: 991px) {
+        #quote-page .quotation-wrap {
+            margin-top: 30px;
+        }
+    }
+    @media (max-width: 575px) {
+        #quote-page.quotation-section {
+            padding-top: 60px;
+            padding-bottom: 60px;
+        }
+        #quote-page .quotation-wrap {
+            padding: 22px 16px;
+        }
+        .prestation-checkboxes {
+            grid-template-columns: 1fr;
+        }
+        .quotation-wrap .theme-btn {
+            width: 100%;
+        }
+    }
 </style>
 {% endblock styles %}
 
@@ -61,7 +221,7 @@
     <!-- Quotation Section -->
      <div id="quote-page" class="quotation-section gray-bg section-padding">
         <div class="container">
-            <div class="row align-items-center">
+            <div class="row align-items-start">
                 <div class="col-xl-6 col-lg-6 col-md-12">
                     <div class="quotation-intro-wrap">
                         <div class="section-title">
@@ -79,73 +239,73 @@
                             <p class="quotation-desc">
                                 Décrivez-nous votre projet et la date souhaitée : nous revenons vers vous rapidement avec une proposition sur mesure.
                             </p>
-                            <form action="">
+                            {% if messages %}
+                            {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}" role="alert" style="margin-bottom:16px;">
+                                {{ message }}
+                            </div>
+                            {% endfor %}
+                            {% endif %}
+
+                            <form method="post" action="{% url 'site_:demande_avis' %}" novalidate>
+                                {% csrf_token %}
                                 <div class="row">
                                     <div class="col-12 col-md-6">
-                                        <label>Nom complet
-                                        </label>
-                                        <input class="form-control" type="text" placeholder="Nom complet" required="">
+                                        <label for="{{ form.nom_complet.id_for_label }}">{{ form.nom_complet.label }}</label>
+                                        {{ form.nom_complet }}
+                                        {% if form.nom_complet.errors %}<small class="text-danger">{{ form.nom_complet.errors|striptags }}</small>{% endif %}
                                     </div>
                                     <div class="col-12 col-md-6">
-                                        <label>Lieu de l'événement
-                                        </label>
-                                        <input class="form-control" type="text" placeholder="Ville / Lieu" required="">
+                                        <label for="{{ form.lieu.id_for_label }}">{{ form.lieu.label }}</label>
+                                        {{ form.lieu }}
+                                        {% if form.lieu.errors %}<small class="text-danger">{{ form.lieu.errors|striptags }}</small>{% endif %}
                                     </div>
                                     <div class="col-12 col-md-6">
-                                        <label>Numéro de téléphone
-                                        </label>
-                                        <input class="form-control" type="tel" placeholder="Numéro de téléphone" required="">
+                                        <label for="{{ form.telephone.id_for_label }}">{{ form.telephone.label }}</label>
+                                        {{ form.telephone }}
+                                        {% if form.telephone.errors %}<small class="text-danger">{{ form.telephone.errors|striptags }}</small>{% endif %}
                                     </div>
                                     <div class="col-12 col-md-6">
-                                        <label>E-mail
-                                        </label>
-                                        <input class="form-control" type="email" placeholder="E-mail" required="">
-                                    </div>
-                                    <div class="col-lg-6 col-md-12 mb-20">
-                                        <label>Type de prestation
-                                        </label>
-                                        <div class="quotation-item">
-                                            <select class="form-dropdown form-control select_option" name="service_provider" data-component="dropdown">
-                                                <option value="0"> Choisir une prestation </option>
-                                                <option value="1"> Photographie </option>
-                                                <option value="2"> Vidéographie </option>
-                                                <option value="3"> Organisation d'événement </option>
-                                                <option value="4"> Branding / Identité visuelle </option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 col-md-12 mb-20">
-                                        <label>Type d'événement
-                                        </label>
-                                        <div class="quotation-item">
-                                            <select class="form-dropdown form-control select_option" name="event_type" data-component="dropdown">
-                                                <option value="0"> Choisir un événement </option>
-                                                <option value="1"> Mariage </option>
-                                                <option value="2"> Portrait / Studio </option>
-                                                <option value="3"> Cérémonie </option>
-                                                <option value="4"> Événement d'entreprise </option>
-                                                <option value="5"> Anniversaire / Fête </option>
-                                                <option value="6"> Autre </option>
-
-                                            </select>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="col-12 col-md-6">
-                                        <label>Date de l'événement
-                                        </label>
-                                        <input class="form-control" type="date" required="">
-                                    </div>
-
-                                    <div class="col-12 col-md-6">
-                                        <label>Heure
-                                        </label>
-                                        <input class="form-control" type="time" required="">
+                                        <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+                                        {{ form.email }}
+                                        {% if form.email.errors %}<small class="text-danger">{{ form.email.errors|striptags }}</small>{% endif %}
                                     </div>
 
                                     <div class="col-12">
-                                        <button class="theme-btn mt-30">Envoyer la demande</button>
+                                        <label>{{ form.prestations.label }}</label>
+                                        <div class="quotation-item prestation-checkboxes">
+                                            {% for checkbox in form.prestations %}
+                                            <div class="form-check">
+                                                {{ checkbox.tag }}
+                                                <label class="form-check-label" for="{{ checkbox.id_for_label }}">{{ checkbox.choice_label }}</label>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                        {% if form.prestations.errors %}<small class="text-danger">{{ form.prestations.errors|striptags }}</small>{% endif %}
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label for="{{ form.type_evenement.id_for_label }}">{{ form.type_evenement.label }}</label>
+                                        <div class="quotation-item">
+                                            {{ form.type_evenement }}
+                                        </div>
+                                        {% if form.type_evenement.errors %}<small class="text-danger">{{ form.type_evenement.errors|striptags }}</small>{% endif %}
+                                    </div>
+
+                                    <div class="col-12 col-md-6">
+                                        <label for="{{ form.date_evenement.id_for_label }}">{{ form.date_evenement.label }}</label>
+                                        {{ form.date_evenement }}
+                                        {% if form.date_evenement.errors %}<small class="text-danger">{{ form.date_evenement.errors|striptags }}</small>{% endif %}
+                                    </div>
+
+                                    <div class="col-12 col-md-6">
+                                        <label for="{{ form.heure.id_for_label }}">{{ form.heure.label }}</label>
+                                        {{ form.heure }}
+                                        {% if form.heure.errors %}<small class="text-danger">{{ form.heure.errors|striptags }}</small>{% endif %}
+                                    </div>
+
+                                    <div class="col-12">
+                                        <button type="submit" class="theme-btn mt-30">Envoyer la demande</button>
                                     </div>
                                 </div>
                             </form>

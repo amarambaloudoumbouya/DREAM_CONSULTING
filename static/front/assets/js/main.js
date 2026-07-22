@@ -36,7 +36,7 @@
 
   // data-backround
 
-  $("[data-background").each(function () {
+  $("[data-background]").each(function () {
     $(this).css(
       "background-image",
       "url( " + $(this).attr("data-background") + "  )"
@@ -136,22 +136,25 @@
 
   // Testimonial # 01
 
-  $(".testimonial-one").owlCarousel({
-    items: 1,
-    dots: true,
-    nav: false,
-    loop: true,
-    autoplay: false,
-    autoplayTimeout: 5000,
-    smartSpeed: 3000,
-    slideSpeed: 300,
-    margin: 30,
-    navText: [
-      "<i class='las la-arrow-left'></i>",
-      "<i class='las la-arrow-right'></i>",
-    ],
-    
-  });
+  var $testimonialOne = $(".testimonial-one");
+  if ($testimonialOne.length) {
+    var testimonialCount = $testimonialOne.children().length;
+    $testimonialOne.owlCarousel({
+      items: 1,
+      dots: true,
+      nav: false,
+      loop: testimonialCount > 1,
+      autoplay: testimonialCount > 1,
+      autoplayTimeout: 5000,
+      smartSpeed: 3000,
+      slideSpeed: 300,
+      margin: 30,
+      navText: [
+        "<i class='las la-arrow-left'></i>",
+        "<i class='las la-arrow-right'></i>",
+      ],
+    });
+  }
 
 
     // Testimonial # 02
@@ -200,40 +203,46 @@
 
   // Project Slider
 
-     $(".project-slider").owlCarousel({
-    items: 1,
-    margin: 30,
-    dots: true,
-    nav: true,
-    loop: true,
-    autoplay: true,
-    responsiveClass: true,
-    navText: [
-      "<i class='las la-arrow-left'></i>",
-      "<i class='las la-arrow-right'></i>",
-    ],
-    responsive: {
-      575: {
-        items: 1,
-        nav: false,
-        dots: false,
+  var $projectSlider = $(".project-slider");
+  if ($projectSlider.length) {
+    var projectCount = $projectSlider.children().length;
+    $projectSlider.owlCarousel({
+      items: 1,
+      margin: 30,
+      dots: true,
+      nav: true,
+      loop: projectCount > 3,
+      autoplay: projectCount > 1,
+      responsiveClass: true,
+      navText: [
+        "<i class='las la-arrow-left'></i>",
+        "<i class='las la-arrow-right'></i>",
+      ],
+      responsive: {
+        575: {
+          items: 1,
+          nav: false,
+          dots: false,
+          loop: projectCount > 1,
+        },
+        767: {
+          items: 2,
+          dots: true,
+          loop: projectCount > 2,
+        },
+        990: {
+          items: 3,
+          dots: false,
+          loop: projectCount > 3,
+        },
+        1200: {
+          items: 3,
+          dots: false,
+          loop: projectCount > 3,
+        },
       },
-
-      767: {
-        items: 2,
-        dots: true,
-      },
-
-      990: {
-        items: 3,
-        dots: false,
-      },
-      1200: {
-        items: 3,
-        dots: false,
-      },
-    },
-  });
+    });
+  }
 
 
   $(".project-img-slider").owlCarousel({
@@ -375,38 +384,71 @@
       },
     });
 
+  var $teamSlider = $(".team-slider");
+  if ($teamSlider.length) {
+    var teamCount = $teamSlider.children().length;
+    $teamSlider.owlCarousel({
+      items: 4,
+      margin: 20,
+      dots: true,
+      nav: true,
+      loop: teamCount > 4,
+      autoplay: teamCount > 1,
+      autoplayTimeout: 4000,
+      autoplayHoverPause: true,
+      smartSpeed: 800,
+      responsiveClass: true,
+      navText: [
+        "<i class='las la-arrow-left'></i>",
+        "<i class='las la-arrow-right'></i>",
+      ],
+      responsive: {
+        0: {
+          items: 1,
+          nav: false,
+          dots: true,
+          loop: teamCount > 1,
+        },
+        575: {
+          items: 2,
+          nav: false,
+          dots: true,
+          loop: teamCount > 2,
+        },
+        767: {
+          items: 3,
+          nav: true,
+          dots: true,
+          loop: teamCount > 3,
+        },
+        990: {
+          items: 4,
+          nav: true,
+          dots: false,
+          loop: teamCount > 4,
+        },
+        1200: {
+          items: 4,
+          nav: true,
+          dots: false,
+          loop: teamCount > 4,
+        },
+      },
+    });
+  }
+
  
   // Progress Bar JS
-
-  $("#bar1").barfiller({
-    barColor: "#1B1464",
-    duration: 5000,
-  });
-
-  $("#bar2").barfiller({
-    barColor: "#1B1464",
-    duration: 5000,
-  });
-
-  $("#bar3").barfiller({
-    barColor: "#1B1464",
-    duration: 5000,
-  });
-  
-  $("#bar4").barfiller({
-    barColor: "#1B1464",
-    duration: 5000,
-  });
-
-  $("#bar5").barfiller({
-    barColor: "#1B1464",
-    duration: 5000,
-  });
-
-  $("#bar6").barfiller({
-    barColor: "#1B1464",
-    duration: 5000,
-  });
+  if ($.fn.barfiller) {
+    ["#bar1", "#bar2", "#bar3", "#bar4", "#bar5", "#bar6"].forEach(function (sel) {
+      if ($(sel).length) {
+        $(sel).barfiller({
+          barColor: "#1B1464",
+          duration: 5000,
+        });
+      }
+    });
+  }
 
   // Wow Animation
   new WOW().init();

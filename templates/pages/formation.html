@@ -1,0 +1,312 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block title %}
+    <title>Formations | Dream Consulting Com</title>
+{% endblock title %}
+
+{% block styles %}
+<style>
+    .formation-hero-copy {
+        max-width: 640px;
+        margin: 0 auto;
+    }
+    .formation-hero-copy p {
+        color: rgba(255, 255, 255, .88);
+        font-size: 16px;
+        line-height: 1.7;
+        margin-top: 12px;
+    }
+    .formation-intro {
+        background: linear-gradient(135deg, #f7f6fb 0%, #ffffff 55%, #fff6eb 100%);
+    }
+    .formation-intro .section-title h2 span {
+        color: #F7941D;
+    }
+    .formation-pillars {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+        margin-top: 40px;
+    }
+    .formation-pillar {
+        padding: 28px 24px;
+        border-left: 3px solid #F7941D;
+        background: rgba(255, 255, 255, .7);
+    }
+    .formation-pillar i {
+        font-size: 28px;
+        color: #1B1464;
+        margin-bottom: 12px;
+        display: block;
+    }
+    .formation-pillar h5 {
+        font-size: 18px;
+        margin-bottom: 8px;
+        color: #1B1464;
+    }
+    .formation-pillar p {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.6;
+        color: #666;
+    }
+    .formation-list .formation-item {
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        gap: 0;
+        margin-bottom: 28px;
+        overflow: hidden;
+        background: #fff;
+        box-shadow: 0 18px 45px rgba(27, 20, 100, .08);
+        border-radius: 4px;
+        transition: transform .35s ease, box-shadow .35s ease;
+    }
+    .formation-list .formation-item:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 24px 55px rgba(27, 20, 100, .14);
+    }
+    .formation-list .formation-media {
+        position: relative;
+        min-height: 260px;
+        overflow: hidden;
+    }
+    .formation-list .formation-media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform .6s ease;
+    }
+    .formation-list .formation-item:hover .formation-media img {
+        transform: scale(1.06);
+    }
+    .formation-list .formation-media .formation-icon {
+        position: absolute;
+        top: 18px;
+        left: 18px;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: #F7941D;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+    }
+    .formation-list .formation-body {
+        padding: 32px 36px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .formation-list .formation-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px 18px;
+        margin-bottom: 12px;
+    }
+    .formation-list .formation-meta span {
+        font-size: 12px;
+        letter-spacing: .6px;
+        text-transform: uppercase;
+        color: #1B1464;
+        font-weight: 600;
+    }
+    .formation-list .formation-meta span i {
+        color: #F7941D;
+        margin-right: 4px;
+    }
+    .formation-list .formation-body h3 {
+        font-size: 26px;
+        margin-bottom: 12px;
+        color: #1B1464;
+    }
+    .formation-list .formation-body p {
+        font-size: 15px;
+        line-height: 1.7;
+        color: #666;
+        margin-bottom: 16px;
+    }
+    .formation-list .formation-points {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 22px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    .formation-list .formation-points li {
+        font-size: 13px;
+        padding: 6px 12px;
+        background: #f4f3fa;
+        color: #1B1464;
+        border-radius: 20px;
+    }
+    .formation-list .formation-body .theme-btn {
+        align-self: flex-start;
+    }
+    .formation-cta {
+        background: #1B1464;
+        color: #fff;
+        text-align: center;
+        padding: 80px 0;
+        position: relative;
+        overflow: hidden;
+    }
+    .formation-cta::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at top right, rgba(247, 148, 29, .25), transparent 45%);
+        pointer-events: none;
+    }
+    .formation-cta .container {
+        position: relative;
+        z-index: 1;
+    }
+    .formation-cta h2 {
+        color: #fff;
+        font-size: 40px;
+        margin-bottom: 14px;
+    }
+    .formation-cta h2 span {
+        color: #F7941D;
+    }
+    .formation-cta p {
+        color: rgba(255, 255, 255, .82);
+        max-width: 560px;
+        margin: 0 auto 28px;
+        font-size: 16px;
+        line-height: 1.7;
+    }
+    @media (max-width: 991px) {
+        .formation-list .formation-item {
+            grid-template-columns: 1fr;
+        }
+        .formation-list .formation-media {
+            min-height: 220px;
+        }
+        .formation-pillars {
+            grid-template-columns: 1fr;
+        }
+        .formation-cta h2 {
+            font-size: 30px;
+        }
+    }
+    @media (max-width: 575px) {
+        .formation-list .formation-body {
+            padding: 24px 20px;
+        }
+        .formation-list .formation-body h3 {
+            font-size: 22px;
+        }
+    }
+</style>
+{% endblock styles %}
+
+{% block content %}
+    <div class="breadcrumb-area team">
+        <div class="overlay-3"></div>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center">
+                    <div class="breadcrumb-title">
+                        <h1>Formations</h1>
+                    </div>
+                    <div class="formation-hero-copy">
+                        <p>Apprenez auprès de professionnels du terrain : photo, vidéo, branding, motion et drone.</p>
+                    </div>
+                    <div class="breadcrumb-icon">
+                        <i class="las la-angle-down"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="formation-intro section-padding pb-70">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-8 col-lg-9 text-center">
+                    <div class="section-title">
+                        <h6>Dream Consulting Com</h6>
+                        <h2 class="visible-slowly-right">Des formations <span>pratiques</span> et professionnelles</h2>
+                        <p class="pt-20">Que vous soyez débutant ou en reconversion, nos ateliers allient théorie utile et pratique intensive pour vous rendre opérationnel rapidement.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="formation-pillars">
+                <div class="formation-pillar wow fadeInUp" data-wow-delay=".1s">
+                    <i class="las la-chalkboard-teacher"></i>
+                    <h5>Formateurs pros</h5>
+                    <p>Des experts actifs sur le terrain, pas uniquement en salle de cours.</p>
+                </div>
+                <div class="formation-pillar wow fadeInUp" data-wow-delay=".2s">
+                    <i class="las la-tools"></i>
+                    <h5>Matériel pro</h5>
+                    <p>Caméras, drones, logiciels et studio mis à disposition pendant la formation.</p>
+                </div>
+                <div class="formation-pillar wow fadeInUp" data-wow-delay=".3s">
+                    <i class="las la-certificate"></i>
+                    <h5>Projet concret</h5>
+                    <p>Vous repartez avec un portfolio réel et une méthode de travail claire.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="formation-list section-padding pt-0 pb-90">
+        <div class="container">
+            <div class="row justify-content-center mb-40">
+                <div class="col-xl-7 col-lg-8 text-center">
+                    <div class="section-title">
+                        <h2 class="visible-slowly-right">Nos <span>parcours</span></h2>
+                        <p class="pt-20">Choisissez le domaine qui vous inspire et demandez un devis personnalisé.</p>
+                    </div>
+                </div>
+            </div>
+
+            {% for formation in formations %}
+            <article class="formation-item wow fadeInUp" data-wow-delay=".{{ forloop.counter }}s">
+                <div class="formation-media">
+                    {% if formation.photo_url %}
+                    <img src="{{ formation.photo_url }}" alt="{{ formation.titre }}">
+                    {% else %}
+                    <img src="{% static 'front/assets/img/gallery/1.jpg' %}" alt="{{ formation.titre }}">
+                    {% endif %}
+                    <div class="formation-icon">
+                        <i class="las {{ formation.icone }}"></i>
+                    </div>
+                </div>
+                <div class="formation-body">
+                    <div class="formation-meta">
+                        <span><i class="las la-clock"></i>{{ formation.duree }}</span>
+                        <span><i class="las la-signal"></i>{{ formation.niveau }}</span>
+                    </div>
+                    <h3>{{ formation.titre }}</h3>
+                    <p>{{ formation.description }}</p>
+                    <ul class="formation-points">
+                        {% for point in formation.points %}
+                        <li>{{ point }}</li>
+                        {% endfor %}
+                    </ul>
+                    <a href="{% url 'formation:inscription' %}?formation={{ formation.slug }}" class="theme-btn">S'inscrire</a>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="formation-cta">
+        <div class="container">
+            <h2>Prêt à <span>passer au niveau supérieur</span> ?</h2>
+            <p>Parlez-nous de vos objectifs : nous construisons ensemble un parcours adapté à votre niveau et à votre budget.</p>
+            <a href="{% url 'formation:inscription' %}" class="theme-btn">S'inscrire</a>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block scripts %}
+{% endblock scripts %}

@@ -1,0 +1,296 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block title %}
+    <title>Inscription formation | Dream Consulting Com</title>
+{% endblock title %}
+
+{% block styles %}
+<style>
+    .inscription-section {
+        background: linear-gradient(160deg, #f7f6fb 0%, #ffffff 45%, #fff7ec 100%);
+    }
+    .inscription-intro h2 span {
+        color: #F7941D;
+    }
+    .inscription-intro p {
+        font-size: 16px;
+        line-height: 1.7;
+        color: #666;
+    }
+    .inscription-points {
+        list-style: none;
+        padding: 0;
+        margin: 28px 0 0;
+    }
+    .inscription-points li {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 14px;
+        font-size: 15px;
+        color: #1B1464;
+    }
+    .inscription-points li i {
+        color: #F7941D;
+        font-size: 18px;
+        margin-top: 2px;
+    }
+    .inscription-form-wrap {
+        background: #fff;
+        padding: 40px 36px;
+        box-shadow: 0 20px 50px rgba(27, 20, 100, .10);
+        border-radius: 4px;
+        border-top: 4px solid #F7941D;
+    }
+    .inscription-form-wrap h5 {
+        font-size: 26px;
+        color: #1B1464;
+        margin-bottom: 8px;
+    }
+    .inscription-form-wrap .form-desc {
+        font-size: 14px;
+        color: #777;
+        margin-bottom: 28px;
+    }
+    .inscription-form-wrap label {
+        font-size: 14px;
+        font-weight: 500;
+        color: #1B1464;
+        margin-bottom: 8px;
+        display: block;
+    }
+    .inscription-form-wrap .form-control,
+    .inscription-form-wrap .form-select {
+        border-color: #EBEAF5;
+        padding: 12px 16px;
+        margin-bottom: 8px;
+        color: #555;
+        width: 100%;
+    }
+    .inscription-form-wrap .nice-select {
+        width: 100%;
+        float: none;
+        margin-bottom: 8px;
+        border-color: #EBEAF5;
+        height: auto;
+        line-height: 1.5;
+        padding: 12px 16px;
+    }
+    .inscription-form-wrap .nice-select .list {
+        width: 100%;
+    }
+    .inscription-form-wrap .form-control:focus,
+    .inscription-form-wrap .form-select:focus {
+        border-color: #F7941D;
+        box-shadow: 0 0 0 0.15rem rgba(247, 148, 29, .2);
+    }
+    .inscription-form-wrap textarea.form-control {
+        min-height: 110px;
+        resize: vertical;
+    }
+    .inscription-form-wrap .field-error {
+        color: #dc3545;
+        font-size: 12px;
+        margin-bottom: 12px;
+        display: block;
+    }
+    .formation-checkboxes {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px 12px;
+        margin-bottom: 8px;
+    }
+    .formation-checkboxes .form-check,
+    .formation-checkboxes > div {
+        margin-bottom: 0 !important;
+        min-height: 0 !important;
+        padding-left: 0 !important;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .formation-checkboxes input[type="checkbox"] {
+        width: 12px !important;
+        height: 12px !important;
+        min-width: 12px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border-radius: 50% !important;
+        border: 1.5px solid #9a96b8 !important;
+        background-color: #fff !important;
+        flex-shrink: 0;
+        appearance: none;
+        -webkit-appearance: none;
+        cursor: pointer;
+        box-shadow: none !important;
+    }
+    .formation-checkboxes input[type="checkbox"]:checked {
+        background-color: #F7941D !important;
+        border-color: #F7941D !important;
+        background-image: none !important;
+        box-shadow: inset 0 0 0 2px #fff !important;
+    }
+    .formation-checkboxes label {
+        font-size: 13px !important;
+        font-weight: 400 !important;
+        margin-bottom: 0 !important;
+        cursor: pointer;
+        color: #444;
+    }
+    .inscription-form-wrap .theme-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: auto;
+        background: #F7941D;
+        color: #fff;
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 20px;
+        text-transform: capitalize;
+        padding: 18px 30px;
+        border: 1px solid #F7941D;
+        border-radius: 7px;
+        text-align: center;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    .inscription-form-wrap .theme-btn:hover {
+        background: #1B1464;
+        border-color: #1B1464;
+        color: #fff;
+    }
+    @media (max-width: 767px) {
+        .inscription-form-wrap .theme-btn {
+            width: 100%;
+            padding: 15px 20px;
+        }
+    }
+    @media (max-width: 575px) {
+        .formation-checkboxes {
+            grid-template-columns: 1fr;
+        }
+        .inscription-form-wrap {
+            padding: 28px 20px;
+        }
+    }
+</style>
+{% endblock styles %}
+
+{% block content %}
+    <div class="breadcrumb-area team">
+        <div class="overlay-3"></div>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center">
+                    <div class="breadcrumb-title">
+                        <h1>Inscription</h1>
+                    </div>
+                    <div class="breadcrumb-icon">
+                        <i class="las la-angle-down"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="inscription-section section-padding">
+        <div class="container">
+            {% if messages %}
+            <div class="row mb-4">
+                <div class="col-12">
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="row align-items-center gy-5">
+                <div class="col-xl-5 col-lg-5">
+                    <div class="inscription-intro">
+                        <div class="section-title">
+                            <h6>Formations Dream Consulting</h6>
+                            <h2 class="visible-slowly-right">Inscrivez-vous à <span>nos formations</span></h2>
+                        </div>
+                        <p>Remplissez le formulaire : nous vous recontactons pour confirmer les dates, le niveau et les modalités de votre parcours.</p>
+                        <ul class="inscription-points">
+                            <li><i class="las la-check-circle"></i><span>Formateurs professionnels du terrain</span></li>
+                            <li><i class="las la-check-circle"></i><span>Matériel et logiciels mis à disposition</span></li>
+                            <li><i class="las la-check-circle"></i><span>Projet concret à la fin de chaque session</span></li>
+                            <li><i class="las la-check-circle"></i><span>Réponse sous 24 à 48 h</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-xl-7 col-lg-7">
+                    <div class="inscription-form-wrap">
+                        <h5>Formulaire d'inscription</h5>
+                        <p class="form-desc">Les champs marqués d'un * sont obligatoires.</p>
+
+                        <form method="post" action="{% url 'formation:inscription' %}" novalidate>
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="{{ form.nom.id_for_label }}">{{ form.nom.label }} *</label>
+                                    {{ form.nom }}
+                                    {% if form.nom.errors %}<span class="field-error">{{ form.nom.errors|striptags }}</span>{% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="{{ form.prenom.id_for_label }}">{{ form.prenom.label }} *</label>
+                                    {{ form.prenom }}
+                                    {% if form.prenom.errors %}<span class="field-error">{{ form.prenom.errors|striptags }}</span>{% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="{{ form.telephone.id_for_label }}">{{ form.telephone.label }} *</label>
+                                    {{ form.telephone }}
+                                    {% if form.telephone.errors %}<span class="field-error">{{ form.telephone.errors|striptags }}</span>{% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="{{ form.email.id_for_label }}">{{ form.email.label }} *</label>
+                                    {{ form.email }}
+                                    {% if form.email.errors %}<span class="field-error">{{ form.email.errors|striptags }}</span>{% endif %}
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="{{ form.niveau.id_for_label }}">{{ form.niveau.label }} *</label>
+                                    {{ form.niveau }}
+                                    {% if form.niveau.errors %}<span class="field-error">{{ form.niveau.errors|striptags }}</span>{% endif %}
+                                </div>
+
+                                <div class="col-12">
+                                    <label>{{ form.formations.label }} *</label>
+                                    <div class="formation-checkboxes">
+                                        {% for checkbox in form.formations %}
+                                        <div class="form-check">
+                                            {{ checkbox.tag }}
+                                            <label for="{{ checkbox.id_for_label }}">{{ checkbox.choice_label }}</label>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    {% if form.formations.errors %}<span class="field-error">{{ form.formations.errors|striptags }}</span>{% endif %}
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="{{ form.message.id_for_label }}">{{ form.message.label }}</label>
+                                    {{ form.message }}
+                                    {% if form.message.errors %}<span class="field-error">{{ form.message.errors|striptags }}</span>{% endif %}
+                                </div>
+
+                                <div class="col-12">
+                                    <button class="theme-btn mt-30">Envoyer mon inscription</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block scripts %}
+{% endblock scripts %}
