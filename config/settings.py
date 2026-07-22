@@ -139,7 +139,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'static'
-
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
@@ -150,7 +149,7 @@ LOGOUT_REDIRECT_URL = 'accounts:login'
 
 # Email
 DEFAULT_FROM_EMAIL = 'Dream Consulting Com <dreamconsulting224@gmail.com>'
-EMAIL_SUBJECT_PREFIX = '[Dream Consulting] '
+EMAIL_SUBJECT_PREFIX = '[Dream Consulting]'
 
 if DEBUG:
     # CONFIGURATION MAILHOG
