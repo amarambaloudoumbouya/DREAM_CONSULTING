@@ -1,6 +1,7 @@
 from django.shortcuts import render
 
 from devis.views import demande_devis
+from medias.models import Branding, Photographie, Video
 from temoignage.views import donner_avis as temoignage_donner_avis
 
 
@@ -13,15 +14,21 @@ def index(request):
 
 
 def photographie(request):
-    return render(request, 'pages/photographie.html')
+    return render(request, 'pages/photographie.html', {
+        'photographies': Photographie.objects.filter(is_active=True).order_by('ordre', 'id'),
+    })
 
 
 def video(request):
-    return render(request, 'pages/video.html')
+    return render(request, 'pages/video.html', {
+        'videos': Video.objects.filter(is_active=True).order_by('ordre', 'id'),
+    })
 
 
 def branding(request):
-    return render(request, 'pages/branding.html')
+    return render(request, 'pages/branding.html', {
+        'brandings': Branding.objects.filter(is_active=True).order_by('ordre', 'id'),
+    })
 
 
 def contact(request):

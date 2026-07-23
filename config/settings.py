@@ -48,6 +48,9 @@ INSTALLED_APPS = [
     'partenaire',
     'temoignage',
     'collaborateur',
+    'about',
+    'slider',
+    'medias',
 ]
 
 AUTH_USER_MODEL = 'accounts.CustomerUser'
@@ -78,6 +81,8 @@ TEMPLATES = [
                 'partenaire.context_processors.partenaires_actifs',
                 'temoignage.context_processors.temoignages_publies',
                 'collaborateur.context_processors.collaborateurs_actifs',
+                'about.context_processors.about_section',
+                'slider.context_processors.sliders_actifs',
             ],
         },
     },
@@ -138,7 +143,7 @@ USE_TZ = True
 # Slash initial obligatoire : sinon les CSS cassent sur les pages /formations/...
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
-STATIC_ROOT = BASE_DIR / 'static'
+# STATIC_ROOT = BASE_DIR / 'static'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'

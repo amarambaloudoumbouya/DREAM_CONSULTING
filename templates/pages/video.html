@@ -78,60 +78,21 @@
                 </div>
             </div>
             <div class="row gy-4 mt-30">
+                {% for item in videos %}
                 <div class="col-xl-4 col-lg-4 col-md-6">
                     <div class="single-video-item">
-                        <video src="{% static 'front/assets/video/hero-video.mp4' %}" poster="{% static 'front/assets/img/gallery/1.jpg' %}" controls loop playsinline preload="metadata"></video>
+                        <video src="{{ item.video_url }}"{% if item.poster_url %} poster="{{ item.poster_url }}"{% endif %} controls loop playsinline preload="metadata"></video>
                         <div class="video-info">
-                            <span>Mariage</span>
-                            <h5>Film de mariage</h5>
+                            <span>{{ item.categorie }}</span>
+                            <h5>{{ item.titre }}</h5>
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-4 col-lg-4 col-md-6">
-                    <div class="single-video-item">
-                        <video src="{% static 'front/assets/video/about-video.mp4' %}" poster="{% static 'front/assets/img/gallery/2.jpg' %}" controls loop playsinline preload="metadata"></video>
-                        <div class="video-info">
-                            <span>Cérémonie</span>
-                            <h5>Reportage de cérémonie</h5>
-                        </div>
-                    </div>
+                {% empty %}
+                <div class="col-12 text-center">
+                    <p class="mb-0">Les vidéos seront bientôt disponibles.</p>
                 </div>
-                <div class="col-xl-4 col-lg-4 col-md-6">
-                    <div class="single-video-item">
-                        <video src="{% static 'front/assets/video/hero-video.mp4' %}" poster="{% static 'front/assets/img/gallery/3.jpg' %}" controls loop playsinline preload="metadata"></video>
-                        <div class="video-info">
-                            <span>Événement</span>
-                            <h5>Couverture d'événement</h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-4 col-lg-4 col-md-6">
-                    <div class="single-video-item">
-                        <video src="{% static 'front/assets/video/about-video.mp4' %}" poster="{% static 'front/assets/img/gallery/4.jpg' %}" controls loop playsinline preload="metadata"></video>
-                        <div class="video-info">
-                            <span>Corporate</span>
-                            <h5>Film institutionnel</h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-4 col-lg-4 col-md-6">
-                    <div class="single-video-item">
-                        <video src="{% static 'front/assets/video/hero-video.mp4' %}" poster="{% static 'front/assets/img/gallery/5.jpg' %}" controls loop playsinline preload="metadata"></video>
-                        <div class="video-info">
-                            <span>Interview</span>
-                            <h5>Témoignage vidéo</h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-4 col-lg-4 col-md-6">
-                    <div class="single-video-item">
-                        <video src="{% static 'front/assets/video/about-video.mp4' %}" poster="{% static 'front/assets/img/gallery/6.jpg' %}" controls loop playsinline preload="metadata"></video>
-                        <div class="video-info">
-                            <span>Anniversaire</span>
-                            <h5>Film d'anniversaire</h5>
-                        </div>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
         </div>
      </div>

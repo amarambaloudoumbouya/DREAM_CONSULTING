@@ -1,0 +1,223 @@
+{% extends 'backend/dashboard.html' %}
+{% block title %}
+<title>Dream consulting com - Photographies</title>
+{% endblock title %}
+
+{% block style %}
+{% endblock style %}
+
+{% block content %}
+<div class="page-content">
+    <div class="main-wrapper">
+
+        {% if messages %}
+        <div class="row">
+            <div class="col">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Ajout d'une photographie</h5>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#add-photographie-modal">
+                            Ajouter une photographie
+                        </button>
+
+                        <div class="modal fade" id="add-photographie-modal" tabindex="-1"
+                            aria-labelledby="addPhotographieModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <form method="post" action="{% url 'medias:photographie_create' %}"
+                                        enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="addPhotographieModalLabel">Nouvelle photographie</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            {% for field in create_form %}
+                                            <div class="mb-3{% if field.name == 'is_active' %} form-check{% endif %}">
+                                                {% if field.name == 'is_active' %}
+                                                {{ field }}
+                                                <label for="{{ field.id_for_label }}" class="form-check-label">{{ field.label }}</label>
+                                                {% else %}
+                                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                                {{ field }}
+                                                {% endif %}
+                                                {% if field.help_text %}
+                                                <div class="form-text">{{ field.help_text }}</div>
+                                                {% endif %}
+                                                {% if field.errors %}
+                                                <div class="text-danger small">{{ field.errors|striptags }}</div>
+                                                {% endif %}
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Fermer</button>
+                                            <button type="submit" class="btn btn-primary">Ajouter</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Liste des photographies</h5>
+                        <table id="photographies-table" class="display" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Titre</th>
+                                    <th>Catégorie</th>
+                                    <th>Ordre</th>
+                                    <th>Actif</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in photographies %}
+                                <tr>
+                                    <td>
+                                        {% if item.image_url %}
+                                        <img src="{{ item.image_url }}" alt="{{ item.titre }}"
+                                            style="max-height:48px;max-width:90px;object-fit:cover;border-radius:4px;">
+                                        {% else %}
+                                        —
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ item.titre }}</td>
+                                    <td>{{ item.categorie }}</td>
+                                    <td>{{ item.ordre }}</td>
+                                    <td>
+                                        {% if item.is_active %}
+                                        <span class="badge bg-success">Oui</span>
+                                        {% else %}
+                                        <span class="badge bg-secondary">Non</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal"
+                                            data-bs-target="#edit-photographie-modal-{{ item.pk }}" title="Modifier">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
+                                            data-bs-target="#delete-photographie-modal-{{ item.pk }}" title="Supprimer">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center">Aucune photographie</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% for pk, form in edit_forms.items %}
+        <div class="modal fade" id="edit-photographie-modal-{{ pk }}" tabindex="-1"
+            aria-labelledby="editPhotographieModalLabel{{ pk }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form method="post" action="{% url 'medias:photographie_update' pk %}"
+                        enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editPhotographieModalLabel{{ pk }}">Modifier la photographie</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            {% for field in form %}
+                            <div class="mb-3{% if field.name == 'is_active' %} form-check{% endif %}">
+                                {% if field.name == 'is_active' %}
+                                {{ field }}
+                                <label for="{{ field.id_for_label }}" class="form-check-label">{{ field.label }}</label>
+                                {% else %}
+                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                {{ field }}
+                                {% endif %}
+                                {% if field.help_text %}
+                                <div class="form-text">{{ field.help_text }}</div>
+                                {% endif %}
+                                {% if field.errors %}
+                                <div class="text-danger small">{{ field.errors|striptags }}</div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                            <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        {% for item in photographies %}
+        <div class="modal fade" id="delete-photographie-modal-{{ item.pk }}" tabindex="-1"
+            aria-labelledby="deletePhotographieModalLabel{{ item.pk }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form method="post" action="{% url 'medias:photographie_delete' item.pk %}">
+                        {% csrf_token %}
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deletePhotographieModalLabel{{ item.pk }}">Supprimer la photographie</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Voulez-vous vraiment supprimer <strong>{{ item.titre }}</strong> ?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                            <button type="submit" class="btn btn-danger">Supprimer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+{% endblock content %}
+
+{% block script %}
+<script>
+    $(document).ready(function () {
+        $('#photographies-table').DataTable({ order: [[3, 'asc']] });
+        var openModalId = "{{ open_modal|default:'' }}";
+        if (openModalId) {
+            var modalEl = document.getElementById(openModalId);
+            if (modalEl) {
+                new bootstrap.Modal(modalEl).show();
+            }
+        }
+    });
+</script>
+{% endblock script %}

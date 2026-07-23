@@ -1,0 +1,249 @@
+{% extends 'backend/dashboard.html' %}
+{% block title %}
+<title>Dream consulting com - À propos</title>
+{% endblock title %}
+
+{% block style %}
+{% endblock style %}
+
+{% block content %}
+<div class="page-content">
+    <div class="main-wrapper">
+
+        {% if messages %}
+        <div class="row">
+            <div class="col">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Section À propos (accueil)</h5>
+                        <p class="text-muted mb-3">Titre, texte d'introduction et image affichés à gauche de l'accordéon.</p>
+                        <form method="post" action="{% url 'about:admin_section_update' %}" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="row">
+                                {% for field in section_form %}
+                                <div class="col-md-{% if field.name == 'introduction' or field.name == 'image' %}12{% else %}6{% endif %} mb-3{% if field.name == 'is_active' %} form-check ms-2{% endif %}">
+                                    {% if field.name == 'is_active' %}
+                                    {{ field }}
+                                    <label for="{{ field.id_for_label }}" class="form-check-label">{{ field.label }}</label>
+                                    {% else %}
+                                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                    {{ field }}
+                                    {% if field.help_text %}
+                                    <div class="form-text">{{ field.help_text }}</div>
+                                    {% endif %}
+                                    {% endif %}
+                                    {% if field.errors %}
+                                    <div class="text-danger small">{{ field.errors|striptags }}</div>
+                                    {% endif %}
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% if section.image_url %}
+                            <div class="mb-3">
+                                <p class="mb-1 text-muted small">Image actuelle :</p>
+                                <img src="{{ section.image_url }}" alt="À propos" style="max-height:120px;max-width:220px;object-fit:cover;border-radius:6px;">
+                            </div>
+                            {% endif %}
+                            <button type="submit" class="btn btn-primary">Enregistrer la section</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Panneaux d'accordéon</h5>
+                        <p class="text-muted mb-3">Ex. Notre Histoire, Notre Mission, Notre Vision — ordre d'affichage via le champ Ordre.</p>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#add-panel-modal">
+                            Ajouter un panneau
+                        </button>
+
+                        <div class="modal fade" id="add-panel-modal" tabindex="-1"
+                            aria-labelledby="addPanelModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <form method="post" action="{% url 'about:admin_create' %}">
+                                        {% csrf_token %}
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="addPanelModalLabel">Nouveau panneau</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            {% for field in create_form %}
+                                            <div class="mb-3{% if field.name == 'is_active' %} form-check{% endif %}">
+                                                {% if field.name == 'is_active' %}
+                                                {{ field }}
+                                                <label for="{{ field.id_for_label }}" class="form-check-label">{{ field.label }}</label>
+                                                {% else %}
+                                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                                {{ field }}
+                                                {% endif %}
+                                                {% if field.errors %}
+                                                <div class="text-danger small">{{ field.errors|striptags }}</div>
+                                                {% endif %}
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Fermer</button>
+                                            <button type="submit" class="btn btn-primary">Ajouter</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Liste des panneaux</h5>
+                        <table id="about-panels-table" class="display" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Ordre</th>
+                                    <th>Titre</th>
+                                    <th>Aperçu</th>
+                                    <th>Actif</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for panel in panels %}
+                                <tr>
+                                    <td>{{ panel.ordre }}</td>
+                                    <td>{{ panel.titre }}</td>
+                                    <td>{{ panel.contenu|truncatewords:18 }}</td>
+                                    <td>
+                                        {% if panel.is_active %}
+                                        <span class="badge bg-success">Oui</span>
+                                        {% else %}
+                                        <span class="badge bg-secondary">Non</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal"
+                                            data-bs-target="#edit-panel-modal-{{ panel.pk }}" title="Modifier">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
+                                            data-bs-target="#delete-panel-modal-{{ panel.pk }}" title="Supprimer">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center">Aucun panneau</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% for pk, form in edit_forms.items %}
+        <div class="modal fade" id="edit-panel-modal-{{ pk }}" tabindex="-1"
+            aria-labelledby="editPanelModalLabel{{ pk }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form method="post" action="{% url 'about:admin_update' pk %}">
+                        {% csrf_token %}
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editPanelModalLabel{{ pk }}">Modifier le panneau</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            {% for field in form %}
+                            <div class="mb-3{% if field.name == 'is_active' %} form-check{% endif %}">
+                                {% if field.name == 'is_active' %}
+                                {{ field }}
+                                <label for="{{ field.id_for_label }}" class="form-check-label">{{ field.label }}</label>
+                                {% else %}
+                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                {{ field }}
+                                {% endif %}
+                                {% if field.errors %}
+                                <div class="text-danger small">{{ field.errors|striptags }}</div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                            <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        {% for panel in panels %}
+        <div class="modal fade" id="delete-panel-modal-{{ panel.pk }}" tabindex="-1"
+            aria-labelledby="deletePanelModalLabel{{ panel.pk }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form method="post" action="{% url 'about:admin_delete' panel.pk %}">
+                        {% csrf_token %}
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deletePanelModalLabel{{ panel.pk }}">Supprimer le panneau</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Voulez-vous vraiment supprimer <strong>{{ panel.titre }}</strong> ?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                            <button type="submit" class="btn btn-danger">Supprimer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+{% endblock content %}
+
+{% block script %}
+<script>
+    $(document).ready(function () {
+        $('#about-panels-table').DataTable({
+            order: [[0, 'asc']]
+        });
+        var openModalId = "{{ open_modal|default:'' }}";
+        if (openModalId) {
+            var modalEl = document.getElementById(openModalId);
+            if (modalEl) {
+                new bootstrap.Modal(modalEl).show();
+            }
+        }
+    });
+</script>
+{% endblock script %}
