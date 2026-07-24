@@ -2,7 +2,13 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import BrandingForm, PhotographieForm, VideoForm, WebDesignForm
+from .forms import (
+    BrandingForm,
+    PhotographieCreateForm,
+    PhotographieForm,
+    VideoForm,
+    WebDesignForm,
+)
 from .models import Branding, Photographie, Video, WebDesign
 
 
@@ -16,10 +22,29 @@ def _edit_forms(items, form_class, override_pk=None, override_form=None):
     return forms
 
 
+def _photo_categories():
+    return list(
+        Photographie.objects.order_by('categorie')
+        .values_list('categorie', flat=True)
+        .distinct()
+    )
+
+
+def _photo_admin_context(**overrides):
+    items = Photographie.objects.all()
+    context = {
+        'photographies': items,
+        'create_form': PhotographieCreateForm(prefix='create'),
+        'edit_forms': _edit_forms(items, PhotographieForm),
+        'photo_categories': _photo_categories(),
+    }
+    context.update(overrides)
+    return context
+
+
 def _make_crud(model, form_class, template_name, url_namespace, label):
     list_name = f'{url_namespace}_list'
     context_map = {
-        'photographie': 'photographies',
         'branding': 'brandings',
         'video': 'videos',
         'web_design': 'web_designs',
@@ -93,18 +118,74 @@ def _make_crud(model, form_class, template_name, url_namespace, label):
     return admin_list, admin_create, admin_update, admin_delete
 
 
-(
-    admin_photographie_list,
-    admin_photographie_create,
-    admin_photographie_update,
-    admin_photographie_delete,
-) = _make_crud(
-    Photographie,
-    PhotographieForm,
-    'backend/medias/photographie.html',
-    'photographie',
-    'Photographie',
-)
+@login_required
+def admin_photographie_list(request):
+    return render(request, 'backend/medias/photographie.html', _photo_admin_context())
+
+
+@login_required
+def admin_photographie_create(request):
+    if request.method != 'POST':
+        return redirect('medias:photographie_list')
+
+    form = PhotographieCreateForm(request.POST, request.FILES, prefix='create')
+    if form.is_valid():
+        created = form.save()
+        count = len(created)
+        if count > 1:
+            messages.success(
+                request,
+                f'{count} photographies ajoutées dans la catégorie « {created[0].categorie} ».',
+            )
+        else:
+            messages.success(request, 'Photographie ajoutée avec succès.')
+        return redirect('medias:photographie_list')
+
+    messages.error(request, "Erreur lors de l'ajout.")
+    return render(
+        request,
+        'backend/medias/photographie.html',
+        _photo_admin_context(create_form=form, open_modal='add-photographie-modal'),
+    )
+
+
+@login_required
+def admin_photographie_update(request, pk):
+    item = get_object_or_404(Photographie, pk=pk)
+    items = Photographie.objects.all()
+    if request.method != 'POST':
+        return redirect('medias:photographie_list')
+
+    form = PhotographieForm(
+        request.POST,
+        request.FILES,
+        instance=item,
+        prefix=f'edit-{pk}',
+    )
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Photographie modifiée avec succès.')
+        return redirect('medias:photographie_list')
+
+    messages.error(request, 'Erreur lors de la modification.')
+    return render(
+        request,
+        'backend/medias/photographie.html',
+        _photo_admin_context(
+            edit_forms=_edit_forms(items, PhotographieForm, override_pk=pk, override_form=form),
+            open_modal=f'edit-photographie-modal-{pk}',
+        ),
+    )
+
+
+@login_required
+def admin_photographie_delete(request, pk):
+    if request.method == 'POST':
+        item = get_object_or_404(Photographie, pk=pk)
+        item.delete()
+        messages.success(request, 'Photographie supprimée avec succès.')
+    return redirect('medias:photographie_list')
+
 
 (
     admin_branding_list,

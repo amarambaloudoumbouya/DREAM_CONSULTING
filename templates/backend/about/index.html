@@ -4,6 +4,30 @@
 {% endblock title %}
 
 {% block style %}
+<style>
+    #about-panels-table th.col-actions,
+    #about-timelines-table th.col-actions,
+    #about-counters-table th.col-actions {
+        width: 110px;
+        white-space: nowrap;
+    }
+    #about-panels-table td.col-actions,
+    #about-timelines-table td.col-actions,
+    #about-counters-table td.col-actions {
+        white-space: nowrap;
+        vertical-align: middle;
+    }
+    #about-panels-table td.col-actions .btn,
+    #about-timelines-table td.col-actions .btn,
+    #about-counters-table td.col-actions .btn {
+        margin-right: 4px;
+    }
+    #about-panels-table td.col-actions .btn:last-child,
+    #about-timelines-table td.col-actions .btn:last-child,
+    #about-counters-table td.col-actions .btn:last-child {
+        margin-right: 0;
+    }
+</style>
 {% endblock style %}
 
 {% block content %}
@@ -127,7 +151,7 @@
                                     <th>Titre</th>
                                     <th>Aperçu</th>
                                     <th>Actif</th>
-                                    <th>Action</th>
+                                    <th class="col-actions">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -143,7 +167,7 @@
                                         <span class="badge bg-secondary">Non</span>
                                         {% endif %}
                                     </td>
-                                    <td>
+                                    <td class="col-actions">
                                         <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal"
                                             data-bs-target="#edit-panel-modal-{{ panel.pk }}" title="Modifier">
                                             <i class="fas fa-edit"></i>
@@ -227,6 +251,365 @@
         </div>
         {% endfor %}
 
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Timeline (page À propos)</h5>
+                        <p class="text-muted mb-3">Étapes de la frise chronologique affichées sur la page À propos.</p>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#add-timeline-modal">
+                            Ajouter une étape
+                        </button>
+
+                        <div class="modal fade" id="add-timeline-modal" tabindex="-1"
+                            aria-labelledby="addTimelineModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <form method="post" action="{% url 'about:timeline_create' %}"
+                                        enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="addTimelineModalLabel">Nouvelle étape</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            {% for field in timeline_create_form %}
+                                            <div class="mb-3{% if field.name == 'is_active' %} form-check{% endif %}">
+                                                {% if field.name == 'is_active' %}
+                                                {{ field }}
+                                                <label for="{{ field.id_for_label }}" class="form-check-label">{{ field.label }}</label>
+                                                {% else %}
+                                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                                {{ field }}
+                                                {% endif %}
+                                                {% if field.help_text %}
+                                                <div class="form-text">{{ field.help_text }}</div>
+                                                {% endif %}
+                                                {% if field.errors %}
+                                                <div class="text-danger small">{{ field.errors|striptags }}</div>
+                                                {% endif %}
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Fermer</button>
+                                            <button type="submit" class="btn btn-primary">Ajouter</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Liste des étapes timeline</h5>
+                        <table id="about-timelines-table" class="display" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Ordre</th>
+                                    <th>Image</th>
+                                    <th>Année</th>
+                                    <th>Titre</th>
+                                    <th>Actif</th>
+                                    <th class="col-actions">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in timelines %}
+                                <tr>
+                                    <td>{{ item.ordre }}</td>
+                                    <td>
+                                        {% if item.image_url %}
+                                        <img src="{{ item.image_url }}" alt="{{ item.titre }}"
+                                            style="max-height:48px;max-width:90px;object-fit:cover;border-radius:4px;">
+                                        {% else %}
+                                        —
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ item.annee }}</td>
+                                    <td>{{ item.titre }}</td>
+                                    <td>
+                                        {% if item.is_active %}
+                                        <span class="badge bg-success">Oui</span>
+                                        {% else %}
+                                        <span class="badge bg-secondary">Non</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="col-actions">
+                                        <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal"
+                                            data-bs-target="#edit-timeline-modal-{{ item.pk }}" title="Modifier">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
+                                            data-bs-target="#delete-timeline-modal-{{ item.pk }}" title="Supprimer">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center">Aucune étape</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% for pk, form in timeline_edit_forms.items %}
+        <div class="modal fade" id="edit-timeline-modal-{{ pk }}" tabindex="-1"
+            aria-labelledby="editTimelineModalLabel{{ pk }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form method="post" action="{% url 'about:timeline_update' pk %}"
+                        enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editTimelineModalLabel{{ pk }}">Modifier l'étape</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            {% for field in form %}
+                            <div class="mb-3{% if field.name == 'is_active' %} form-check{% endif %}">
+                                {% if field.name == 'is_active' %}
+                                {{ field }}
+                                <label for="{{ field.id_for_label }}" class="form-check-label">{{ field.label }}</label>
+                                {% else %}
+                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                {{ field }}
+                                {% endif %}
+                                {% if field.help_text %}
+                                <div class="form-text">{{ field.help_text }}</div>
+                                {% endif %}
+                                {% if field.errors %}
+                                <div class="text-danger small">{{ field.errors|striptags }}</div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                            <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        {% for item in timelines %}
+        <div class="modal fade" id="delete-timeline-modal-{{ item.pk }}" tabindex="-1"
+            aria-labelledby="deleteTimelineModalLabel{{ item.pk }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form method="post" action="{% url 'about:timeline_delete' item.pk %}">
+                        {% csrf_token %}
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteTimelineModalLabel{{ item.pk }}">Supprimer l'étape</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Voulez-vous vraiment supprimer <strong>{{ item.annee }} — {{ item.titre }}</strong> ?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                            <button type="submit" class="btn btn-danger">Supprimer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Compteurs (page À propos)</h5>
+                        <p class="text-muted mb-3">Chiffres affichés dans la section statistiques de la page À propos.</p>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#add-counter-modal">
+                            Ajouter un compteur
+                        </button>
+
+                        <div class="modal fade" id="add-counter-modal" tabindex="-1"
+                            aria-labelledby="addCounterModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <form method="post" action="{% url 'about:counter_create' %}">
+                                        {% csrf_token %}
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="addCounterModalLabel">Nouveau compteur</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            {% for field in counter_create_form %}
+                                            <div class="mb-3{% if field.name == 'is_active' or field.name == 'is_highlight' %} form-check{% endif %}">
+                                                {% if field.name == 'is_active' or field.name == 'is_highlight' %}
+                                                {{ field }}
+                                                <label for="{{ field.id_for_label }}" class="form-check-label">{{ field.label }}</label>
+                                                {% else %}
+                                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                                {{ field }}
+                                                {% endif %}
+                                                {% if field.help_text %}
+                                                <div class="form-text">{{ field.help_text }}</div>
+                                                {% endif %}
+                                                {% if field.errors %}
+                                                <div class="text-danger small">{{ field.errors|striptags }}</div>
+                                                {% endif %}
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Fermer</button>
+                                            <button type="submit" class="btn btn-primary">Ajouter</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Liste des compteurs</h5>
+                        <table id="about-counters-table" class="display" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Ordre</th>
+                                    <th>Valeur</th>
+                                    <th>Libellé</th>
+                                    <th>Mise en avant</th>
+                                    <th>Actif</th>
+                                    <th class="col-actions">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for counter in counters %}
+                                <tr>
+                                    <td>{{ counter.ordre }}</td>
+                                    <td>{{ counter.valeur }}</td>
+                                    <td>{{ counter.label }}</td>
+                                    <td>
+                                        {% if counter.is_highlight %}
+                                        <span class="badge bg-info">Oui</span>
+                                        {% else %}
+                                        <span class="badge bg-secondary">Non</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if counter.is_active %}
+                                        <span class="badge bg-success">Oui</span>
+                                        {% else %}
+                                        <span class="badge bg-secondary">Non</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="col-actions">
+                                        <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal"
+                                            data-bs-target="#edit-counter-modal-{{ counter.pk }}" title="Modifier">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
+                                            data-bs-target="#delete-counter-modal-{{ counter.pk }}" title="Supprimer">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center">Aucun compteur</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% for pk, form in counter_edit_forms.items %}
+        <div class="modal fade" id="edit-counter-modal-{{ pk }}" tabindex="-1"
+            aria-labelledby="editCounterModalLabel{{ pk }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form method="post" action="{% url 'about:counter_update' pk %}">
+                        {% csrf_token %}
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editCounterModalLabel{{ pk }}">Modifier le compteur</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            {% for field in form %}
+                            <div class="mb-3{% if field.name == 'is_active' or field.name == 'is_highlight' %} form-check{% endif %}">
+                                {% if field.name == 'is_active' or field.name == 'is_highlight' %}
+                                {{ field }}
+                                <label for="{{ field.id_for_label }}" class="form-check-label">{{ field.label }}</label>
+                                {% else %}
+                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                {{ field }}
+                                {% endif %}
+                                {% if field.help_text %}
+                                <div class="form-text">{{ field.help_text }}</div>
+                                {% endif %}
+                                {% if field.errors %}
+                                <div class="text-danger small">{{ field.errors|striptags }}</div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                            <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        {% for counter in counters %}
+        <div class="modal fade" id="delete-counter-modal-{{ counter.pk }}" tabindex="-1"
+            aria-labelledby="deleteCounterModalLabel{{ counter.pk }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form method="post" action="{% url 'about:counter_delete' counter.pk %}">
+                        {% csrf_token %}
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteCounterModalLabel{{ counter.pk }}">Supprimer le compteur</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Voulez-vous vraiment supprimer <strong>{{ counter.valeur }} — {{ counter.label }}</strong> ?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                            <button type="submit" class="btn btn-danger">Supprimer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
     </div>
 </div>
 {% endblock content %}
@@ -235,6 +618,12 @@
 <script>
     $(document).ready(function () {
         $('#about-panels-table').DataTable({
+            order: [[0, 'asc']]
+        });
+        $('#about-timelines-table').DataTable({
+            order: [[0, 'asc']]
+        });
+        $('#about-counters-table').DataTable({
             order: [[0, 'asc']]
         });
         var openModalId = "{{ open_modal|default:'' }}";

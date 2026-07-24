@@ -85,3 +85,76 @@ class AboutAccordion(models.Model):
 
     def __str__(self):
         return self.titre
+
+
+class AboutCounter(models.Model):
+    """Compteur affiché sur la page À propos."""
+
+    valeur = models.PositiveIntegerField(verbose_name='Valeur')
+    label = models.CharField(
+        max_length=100,
+        verbose_name='Libellé',
+        help_text='Ex. : Depuis, Événements couverts',
+    )
+    is_highlight = models.BooleanField(
+        default=False,
+        verbose_name='Mise en avant',
+        help_text='Style distinct pour ce compteur.',
+    )
+    ordre = models.PositiveIntegerField(default=0, verbose_name='Ordre')
+    is_active = models.BooleanField(default=True, verbose_name='Actif')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'compteur à propos'
+        verbose_name_plural = 'compteurs à propos'
+        ordering = ['ordre', 'id']
+
+    def __str__(self):
+        return f'{self.valeur} — {self.label}'
+
+
+class AboutTimeline(models.Model):
+    """Étape de la frise chronologique (page À propos)."""
+
+    annee = models.CharField(
+        max_length=20,
+        verbose_name='Année / date',
+        help_text='Ex. : 2020',
+    )
+    titre = models.CharField(max_length=200, verbose_name='Titre')
+    description = models.TextField(verbose_name='Description')
+    image = models.ImageField(
+        upload_to='about/timeline/',
+        blank=True,
+        verbose_name='Image',
+        help_text='Si vide, l’image de secours est utilisée.',
+    )
+    image_statique = models.CharField(
+        max_length=255,
+        blank=True,
+        verbose_name='Image static (secours)',
+        help_text='Ex. front/assets/img/timeline/1.jpg',
+    )
+    ordre = models.PositiveIntegerField(default=0, verbose_name='Ordre')
+    is_active = models.BooleanField(default=True, verbose_name='Actif')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'étape timeline'
+        verbose_name_plural = 'étapes timeline'
+        ordering = ['ordre', 'id']
+
+    def __str__(self):
+        return f'{self.annee} — {self.titre}'
+
+    @property
+    def image_url(self):
+        if self.image:
+            return self.image.url
+        if self.image_statique:
+            from django.templatetags.static import static
+            return static(self.image_statique)
+        return ''

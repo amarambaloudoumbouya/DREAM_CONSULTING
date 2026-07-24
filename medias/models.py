@@ -6,7 +6,8 @@ class Photographie(models.Model):
     categorie = models.CharField(
         max_length=100,
         verbose_name='Catégorie',
-        help_text='Ex. : Mariage, Portrait, Événement',
+        help_text='Ex. : Mariage, Portrait, Événement. Plusieurs photos peuvent partager la même catégorie.',
+        db_index=True,
     )
     titre = models.CharField(
         max_length=200,
@@ -44,7 +45,7 @@ class Photographie(models.Model):
         ordering = ['ordre', 'id']
 
     def __str__(self):
-        return self.titre
+        return f'{self.categorie} — {self.titre}'
 
     @property
     def image_url(self):
@@ -53,6 +54,11 @@ class Photographie(models.Model):
         if self.image_statique:
             return static(self.image_statique)
         return ''
+
+    @property
+    def categorie_slug(self):
+        from django.utils.text import slugify
+        return slugify(self.categorie) or 'autre'
 
 
 class Branding(models.Model):

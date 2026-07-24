@@ -1,5 +1,6 @@
 from django.shortcuts import render
 
+from about.models import AboutAccordion, AboutCounter, AboutTimeline
 from devis.views import demande_devis
 from medias.models import Branding, Photographie, Video, WebDesign
 from temoignage.views import donner_avis as temoignage_donner_avis
@@ -14,8 +15,17 @@ def index(request):
 
 
 def photographie(request):
+    photographies = Photographie.objects.filter(is_active=True).order_by('ordre', 'id')
+    categories = []
+    seen = set()
+    for photo in photographies:
+        slug = photo.categorie_slug
+        if slug not in seen:
+            seen.add(slug)
+            categories.append({'name': photo.categorie, 'slug': slug})
     return render(request, 'pages/photographie.html', {
-        'photographies': Photographie.objects.filter(is_active=True).order_by('ordre', 'id'),
+        'photographies': photographies,
+        'photo_categories': categories,
     })
 
 
@@ -42,7 +52,15 @@ def contact(request):
 
 
 def apropos(request):
-    return render(request, 'pages/apropos.html')
+    notre_histoire = AboutAccordion.objects.filter(
+        titre__iexact='Notre Histoire',
+        is_active=True,
+    ).first()
+    return render(request, 'pages/apropos.html', {
+        'notre_histoire': notre_histoire,
+        'about_timelines': AboutTimeline.objects.filter(is_active=True).order_by('ordre', 'id'),
+        'about_counters': AboutCounter.objects.filter(is_active=True).order_by('ordre', 'id'),
+    })
 
 
 def demande_avis(request):

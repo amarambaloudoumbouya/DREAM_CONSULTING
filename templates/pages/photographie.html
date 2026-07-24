@@ -8,6 +8,29 @@
 <!-- Styles -->
 {% block styles %}
 <style>
+    .photography-section .photo-filters {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 30px;
+    }
+    .photography-section .photo-filters button {
+        border: 1px solid rgba(27, 20, 100, .18);
+        background: #fff;
+        color: #1B1464;
+        padding: 8px 18px;
+        border-radius: 30px;
+        font-size: 13px;
+        letter-spacing: .4px;
+        transition: all .3s ease;
+    }
+    .photography-section .photo-filters button:hover,
+    .photography-section .photo-filters button.active {
+        background: #1B1464;
+        border-color: #1B1464;
+        color: #fff;
+    }
     .photography-section .single-photo-item {
         position: relative;
         border-radius: 14px;
@@ -56,6 +79,9 @@
         color: #fff;
         font-size: 26px;
     }
+    .photography-section .photo-item.is-hidden {
+        display: none !important;
+    }
 </style>
 {% endblock styles %}
 
@@ -63,8 +89,8 @@
 {% block content %}
 
     <!-- Breadcrumb Area  -->
-    <div class="breadcrumb-area team">  
-        <div class="overlay-3"></div>  
+    <div class="breadcrumb-area team">
+        <div class="overlay-3"></div>
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-6 text-center">
@@ -72,7 +98,7 @@
                         <h1>Photographie</h1>
                     </div>
                     <div class="breadcrumb-icon">
-                        <i class="las la-angle-down"></i>                    
+                        <i class="las la-angle-down"></i>
                     </div>
                 </div>
             </div>
@@ -86,14 +112,24 @@
                 <div class="col-xl-7 col-lg-8 col-md-10 text-center">
                     <div class="section-title">
                         <h2 class="visible-slowly-right">Notre <span>galerie</span> photo</h2>
-                        <p class="pt-20 wow fadeInUp animated" data-wow-delay=".4s">Une sélection de nos plus beaux clichés : mariages, portraits, cérémonies et événements immortalisés avec passion. Cliquez sur une image pour l'agrandir.</p>
+                        <p class="pt-20 wow fadeInUp animated" data-wow-delay=".4s">Une sélection de nos plus beaux clichés : mariages, portraits, cérémonies et événements immortalisés avec passion. Cliquez sur une catégorie pour filtrer, puis sur une image pour l'agrandir.</p>
                     </div>
                 </div>
             </div>
-            <div class="row gy-4 mt-30">
+
+            {% if photo_categories %}
+            <div class="photo-filters" id="photo-filters">
+                <button type="button" class="active" data-filter="*">Tous</button>
+                {% for cat in photo_categories %}
+                <button type="button" data-filter="{{ cat.slug }}">{{ cat.name }}</button>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="row gy-4 mt-30" id="photo-gallery">
                 {% for photo in photographies %}
-                <div class="col-xl-4 col-lg-4 col-md-6">
-                    <a href="{{ photo.image_url }}" data-fancybox="photographie" class="single-photo-item">
+                <div class="col-xl-4 col-lg-4 col-md-6 photo-item" data-category="{{ photo.categorie_slug }}">
+                    <a href="{{ photo.image_url }}" data-fancybox="galerie-{{ photo.categorie_slug }}" class="single-photo-item" data-caption="{{ photo.titre }}">
                         <img src="{{ photo.image_url }}" alt="{{ photo.titre }}">
                         <div class="photo-overlay">
                             <span>{{ photo.categorie }}</span>
@@ -115,5 +151,28 @@
 
 <!-- Scripts -->
 {% block scripts %}
+<script>
+    (function () {
+        var filters = document.getElementById('photo-filters');
+        if (!filters) return;
+        var buttons = filters.querySelectorAll('button');
+        var items = document.querySelectorAll('#photo-gallery .photo-item');
 
+        buttons.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var filter = btn.getAttribute('data-filter');
+                buttons.forEach(function (b) { b.classList.remove('active'); });
+                btn.classList.add('active');
+
+                items.forEach(function (item) {
+                    if (filter === '*' || item.getAttribute('data-category') === filter) {
+                        item.classList.remove('is-hidden');
+                    } else {
+                        item.classList.add('is-hidden');
+                    }
+                });
+            });
+        });
+    })();
+</script>
 {% endblock scripts %}
