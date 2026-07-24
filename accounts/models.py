@@ -55,6 +55,11 @@ class CustomerUser(AbstractBaseUser, PermissionsMixin):
     reseau_social_twitter  = models.URLField(blank=True, null=True, verbose_name='Twitter')
     reseau_social_linkedin = models.URLField(blank=True, null=True, verbose_name='LinkedIn')
     reseau_social_youtube  = models.URLField(blank=True, null=True, verbose_name='YouTube')
+    ordre                  = models.PositiveIntegerField(
+        default=0,
+        verbose_name='Ordre',
+        help_text='0 = premier à l’affichage, puis 1, 2…',
+    )
     is_active              = models.BooleanField(default=True)
     is_staff               = models.BooleanField(default=False)
     slug                   = models.SlugField(max_length=255, unique=True, editable=False, blank=True,)
@@ -69,7 +74,7 @@ class CustomerUser(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = 'utilisateur'
         verbose_name_plural = 'utilisateurs'
-        ordering = ['-created_at']
+        ordering = ['ordre', 'prenoms', 'nom']
 
     def __str__(self):
         return self.full_name

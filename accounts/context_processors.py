@@ -6,5 +6,5 @@ def equipe_membres(request):
         'equipe_membres': CustomerUser.objects.filter(
             role='membre',
             is_active=True,
-        ).order_by('prenoms', 'nom'),
+        ).order_by('ordre', 'prenoms', 'nom'),
     }

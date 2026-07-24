@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Branding, Photographie, Video
+from .models import Branding, Photographie, Video, WebDesign
 
 
 @admin.register(Photographie)
@@ -25,3 +25,11 @@ class VideoAdmin(admin.ModelAdmin):
     list_filter = ('is_active', 'categorie')
     list_editable = ('ordre', 'is_active')
     search_fields = ('titre', 'categorie')
+
+
+@admin.register(WebDesign)
+class WebDesignAdmin(admin.ModelAdmin):
+    list_display = ('titre', 'categorie', 'ordre', 'is_active', 'updated_at')
+    list_filter = ('is_active', 'categorie')
+    list_editable = ('ordre', 'is_active')
+    search_fields = ('titre', 'categorie', 'description')

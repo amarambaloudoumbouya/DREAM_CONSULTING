@@ -108,6 +108,69 @@ class Branding(models.Model):
         return ''
 
 
+class WebDesign(models.Model):
+    categorie = models.CharField(
+        max_length=100,
+        verbose_name='Catégorie',
+        help_text='Ex. : Site vitrine, E-commerce, Landing page',
+    )
+    titre = models.CharField(
+        max_length=200,
+        verbose_name='Titre',
+        help_text='Titre du projet. Ex. : Site web restaurant',
+    )
+    description = models.TextField(
+        blank=True,
+        verbose_name='Description',
+        help_text='Courte description du projet web.',
+    )
+    image = models.ImageField(
+        upload_to='medias/web_design/',
+        blank=True,
+        verbose_name='Image',
+        help_text='Aperçu du projet. Si vide, l’image de secours est utilisée.',
+    )
+    image_statique = models.CharField(
+        max_length=255,
+        blank=True,
+        verbose_name='Image static (secours)',
+        help_text='Ex. front/assets/img/gallery/1.jpg',
+    )
+    url_projet = models.URLField(
+        blank=True,
+        verbose_name='URL du projet',
+        help_text='Lien vers le site en ligne (optionnel).',
+    )
+    ordre = models.PositiveIntegerField(
+        default=0,
+        verbose_name='Ordre',
+        help_text='0 = premier projet, puis 1, 2…',
+    )
+    is_active = models.BooleanField(
+        default=True,
+        verbose_name='Actif',
+        help_text='Décochez pour masquer ce projet sur le site.',
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'web design'
+        verbose_name_plural = 'web designs'
+        ordering = ['ordre', 'id']
+
+    def __str__(self):
+        return self.titre
+
+    @property
+    def image_url(self):
+        if self.image:
+            return self.image.url
+        if self.image_statique:
+            return static(self.image_statique)
+        return ''
+
+
 class Video(models.Model):
     categorie = models.CharField(
         max_length=100,

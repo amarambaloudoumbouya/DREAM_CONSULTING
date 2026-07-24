@@ -23,9 +23,10 @@ class CustomerUserAdmin(BaseUserAdmin):
     form = CustomerUserChangeForm
     change_password_form = AdminPasswordChangeForm
 
-    ordering = ('email',)
-    list_display = ('email', 'prenoms', 'nom', 'role', 'tel', 'is_staff', 'is_active', 'created_at')
+    ordering = ('ordre', 'email')
+    list_display = ('email', 'prenoms', 'nom', 'role', 'tel', 'ordre', 'is_staff', 'is_active', 'created_at')
     list_filter = ('is_staff', 'is_active', 'sexe', 'role')
+    list_editable = ('ordre', 'is_active')
     search_fields = ('email', 'prenoms', 'nom', 'tel')
     readonly_fields = ('slug', 'created_at', 'updated_at', 'last_login')
     filter_horizontal = ('groups', 'user_permissions')
@@ -42,6 +43,7 @@ class CustomerUserAdmin(BaseUserAdmin):
                 'adresse',
                 'fonction_poste',
                 'photo',
+                'ordre',
             ),
         }),
         ('Réseaux sociaux', {

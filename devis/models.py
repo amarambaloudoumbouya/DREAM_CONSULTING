@@ -10,6 +10,7 @@ class DemandeDevis(models.Model):
         ('motion_design', 'Motion Design'),
         ('photographie', 'Photographie'),
         ('videographie', 'Vidéographie'),
+        ('web_design', 'Web design'),
     )
     EVENT_CHOICES = (
         ('mariage', 'Mariage'),

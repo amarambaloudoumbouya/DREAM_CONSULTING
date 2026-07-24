@@ -97,7 +97,7 @@ def user_delete(request, pk):
 
 
 def _membre_qs():
-    return CustomerUser.objects.filter(role='membre')
+    return CustomerUser.objects.filter(role='membre').order_by('ordre', 'prenoms', 'nom')
 
 
 def _edit_membre_forms(membres, override_pk=None, override_form=None):

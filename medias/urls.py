@@ -20,4 +20,9 @@ urlpatterns = [
     path('videos/ajouter/', views.admin_video_create, name='video_create'),
     path('videos/<int:pk>/modifier/', views.admin_video_update, name='video_update'),
     path('videos/<int:pk>/supprimer/', views.admin_video_delete, name='video_delete'),
+    # Web design
+    path('web-design/', views.admin_web_design_list, name='web_design_list'),
+    path('web-design/ajouter/', views.admin_web_design_create, name='web_design_create'),
+    path('web-design/<int:pk>/modifier/', views.admin_web_design_update, name='web_design_update'),
+    path('web-design/<int:pk>/supprimer/', views.admin_web_design_delete, name='web_design_delete'),
 ]

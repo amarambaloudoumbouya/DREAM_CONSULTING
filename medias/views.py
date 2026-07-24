@@ -2,8 +2,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import BrandingForm, PhotographieForm, VideoForm
-from .models import Branding, Photographie, Video
+from .forms import BrandingForm, PhotographieForm, VideoForm, WebDesignForm
+from .models import Branding, Photographie, Video, WebDesign
 
 
 def _edit_forms(items, form_class, override_pk=None, override_form=None):
@@ -22,6 +22,7 @@ def _make_crud(model, form_class, template_name, url_namespace, label):
         'photographie': 'photographies',
         'branding': 'brandings',
         'video': 'videos',
+        'web_design': 'web_designs',
     }
     context_key = context_map[url_namespace]
     modal_prefix = url_namespace
@@ -129,4 +130,17 @@ def _make_crud(model, form_class, template_name, url_namespace, label):
     'backend/medias/video.html',
     'video',
     'Vidéo',
+)
+
+(
+    admin_web_design_list,
+    admin_web_design_create,
+    admin_web_design_update,
+    admin_web_design_delete,
+) = _make_crud(
+    WebDesign,
+    WebDesignForm,
+    'backend/medias/web_design.html',
+    'web_design',
+    'Projet web design',
 )

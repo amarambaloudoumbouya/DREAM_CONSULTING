@@ -1,0 +1,139 @@
+{% extends "index.html" %}
+{% load static %}
+<!-- Title -->
+{% block title %}
+    <title>Web design | Dream Consulting Com</title>
+{% endblock title %}
+
+<!-- Styles -->
+{% block styles %}
+<style>
+    .breadcrumb-area.breadcrumb-web-design {
+        background-image: url("{% static 'front/assets/img/breadcrumb/dream_branding_2.jpeg' %}");
+        background-position: center center;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-color: #1B1464;
+        height: 480px;
+    }
+    @media (max-width: 767px) {
+        .breadcrumb-area.breadcrumb-web-design {
+            height: 280px;
+            background-size: contain;
+        }
+    }
+    .web-design-section .single-web-design-item {
+        position: relative;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 15px 40px rgba(28, 80, 58, .10);
+        background: #000;
+        height: 100%;
+    }
+    .web-design-section .single-web-design-item img {
+        width: 100%;
+        height: 280px;
+        object-fit: cover;
+        display: block;
+        transition: transform .4s ease;
+    }
+    .web-design-section .single-web-design-item:hover img {
+        transform: scale(1.05);
+    }
+    .web-design-section .web-design-info {
+        padding: 22px 20px 20px;
+        background: #0f0f1a;
+    }
+    .web-design-section .web-design-info span {
+        display: inline-block;
+        font-size: 12px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: #29ABE2;
+        margin-bottom: 6px;
+    }
+    .web-design-section .web-design-info h5 {
+        color: #fff;
+        margin: 0 0 8px;
+        font-size: 19px;
+    }
+    .web-design-section .web-design-info p {
+        color: rgba(255, 255, 255, .72);
+        font-size: 14px;
+        margin: 0 0 14px;
+        line-height: 1.55;
+    }
+    .web-design-section .web-design-info .theme-btn {
+        padding: 8px 18px;
+        font-size: 13px;
+    }
+</style>
+{% endblock styles %}
+
+<!-- Content -->
+{% block content %}
+
+    <!-- Breadcrumb Area  -->
+    <div class="breadcrumb-area team breadcrumb-web-design">
+        <div class="overlay-3"></div>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6 text-center">
+                    <div class="breadcrumb-title">
+                        <h1>Web design</h1>
+                    </div>
+                    <div class="breadcrumb-icon">
+                        <i class="las la-angle-down"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+   <!-- Web Design Section -->
+     <div class="web-design-section section-padding pb-90">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-7 col-lg-8 col-md-10 text-center">
+                    <div class="section-title">
+                        <h2 class="visible-slowly-right">Nos <span>projets</span> web</h2>
+                        <p class="pt-20 wow fadeInUp animated" data-wow-delay=".4s">Sites vitrines, e-commerce et interfaces sur mesure : découvrez nos réalisations web design pensées pour convertir et marquer les esprits.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row gy-4 mt-30">
+                {% for item in web_designs %}
+                <div class="col-xl-4 col-lg-4 col-md-6">
+                    <div class="single-web-design-item">
+                        {% if item.image_url %}
+                        <img src="{{ item.image_url }}" alt="{{ item.titre }}">
+                        {% else %}
+                        <img src="{% static 'front/assets/img/gallery/1.jpg' %}" alt="{{ item.titre }}">
+                        {% endif %}
+                        <div class="web-design-info">
+                            <span>{{ item.categorie }}</span>
+                            <h5>{{ item.titre }}</h5>
+                            {% if item.description %}
+                            <p>{{ item.description|truncatewords:22 }}</p>
+                            {% endif %}
+                            {% if item.url_projet %}
+                            <a href="{{ item.url_projet }}" class="theme-btn" target="_blank" rel="noopener noreferrer">Voir le site</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12 text-center">
+                    <p class="mb-0">Les projets web design seront bientôt disponibles.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+     </div>
+
+{% endblock content %}
+
+<!-- Scripts -->
+{% block scripts %}
+
+{% endblock scripts %}

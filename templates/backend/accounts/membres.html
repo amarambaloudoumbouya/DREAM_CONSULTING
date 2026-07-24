@@ -83,6 +83,7 @@
                                     <th>Fonction</th>
                                     <th>Email</th>
                                     <th>Téléphone</th>
+                                    <th>Ordre</th>
                                     <th>Actif</th>
                                     <th>Action</th>
                                 </tr>
@@ -102,6 +103,7 @@
                                     <td>{{ membre.fonction_poste|default:"—" }}</td>
                                     <td>{{ membre.email }}</td>
                                     <td>{{ membre.tel }}</td>
+                                    <td>{{ membre.ordre }}</td>
                                     <td>
                                         {% if membre.is_active %}
                                         <span class="badge bg-success">Oui</span>
@@ -122,7 +124,7 @@
                                 </tr>
                                 {% empty %}
                                 <tr>
-                                    <td colspan="7" class="text-center">Aucun membre</td>
+                                    <td colspan="8" class="text-center">Aucun membre</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -201,7 +203,7 @@
 {% block script %}
 <script>
     $(document).ready(function () {
-        $('#membres-table').DataTable();
+        $('#membres-table').DataTable({ order: [[5, 'asc']] });
         var openModalId = "{{ open_modal|default:'' }}";
         if (openModalId) {
             var modalEl = document.getElementById(openModalId);

@@ -15,7 +15,7 @@ class UserCreateForm(forms.ModelForm):
 
     class Meta:
         model = CustomerUser
-        fields = ['prenoms', 'nom', 'sexe', 'role', 'email', 'tel', 'photo']
+        fields = ['prenoms', 'nom', 'sexe', 'role', 'email', 'tel', 'photo', 'ordre']
         widgets = {
             'prenoms': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Prénom(s)'}),
             'nom': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nom'}),
@@ -24,6 +24,7 @@ class UserCreateForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
             'tel': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Téléphone'}),
             'photo': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'ordre': forms.NumberInput(attrs={'class': 'form-control', 'min': 0}),
         }
 
     def clean(self):
@@ -45,7 +46,7 @@ class UserCreateForm(forms.ModelForm):
 class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = CustomerUser
-        fields = ['prenoms', 'nom', 'sexe', 'role', 'email', 'tel', 'photo']
+        fields = ['prenoms', 'nom', 'sexe', 'role', 'email', 'tel', 'photo', 'ordre']
         widgets = {
             'prenoms': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Prénom(s)'}),
             'nom': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nom'}),
@@ -54,6 +55,7 @@ class UserUpdateForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
             'tel': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Téléphone'}),
             'photo': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'ordre': forms.NumberInput(attrs={'class': 'form-control', 'min': 0}),
         }
 
 
@@ -74,7 +76,7 @@ class MembreCreateForm(forms.ModelForm):
         model = CustomerUser
         fields = [
             'prenoms', 'nom', 'sexe', 'email', 'tel',
-            'fonction_poste', 'photo',
+            'fonction_poste', 'photo', 'ordre',
             'reseau_social_facebook', 'reseau_social_twitter',
             'reseau_social_linkedin', 'reseau_social_youtube',
         ]
@@ -89,6 +91,7 @@ class MembreCreateForm(forms.ModelForm):
                 'placeholder': 'Ex. Photographe, Vidéaste…',
             }),
             'photo': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'ordre': forms.NumberInput(attrs={'class': 'form-control', 'min': 0}),
             'reseau_social_facebook': forms.URLInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'https://facebook.com/...',
@@ -129,7 +132,7 @@ class MembreUpdateForm(forms.ModelForm):
         model = CustomerUser
         fields = [
             'prenoms', 'nom', 'sexe', 'email', 'tel',
-            'fonction_poste', 'photo', 'is_active',
+            'fonction_poste', 'photo', 'ordre', 'is_active',
             'reseau_social_facebook', 'reseau_social_twitter',
             'reseau_social_linkedin', 'reseau_social_youtube',
         ]
@@ -144,6 +147,7 @@ class MembreUpdateForm(forms.ModelForm):
                 'placeholder': 'Ex. Photographe, Vidéaste…',
             }),
             'photo': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'ordre': forms.NumberInput(attrs={'class': 'form-control', 'min': 0}),
             'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'reseau_social_facebook': forms.URLInput(attrs={
                 'class': 'form-control',
