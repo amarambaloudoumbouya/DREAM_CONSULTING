@@ -8,6 +8,12 @@
 <!-- Styles -->
 {% block styles %}
 <style>
+    .breadcrumb-area.breadcrumb-dream {
+        background-image: url("{% static 'front/assets/img/breadcrumb/banniere_dream.jpeg' %}");
+        background-position: center center;
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
     .contact-section .subimit-form-wrap form {
         margin-top: 40px;
         background: #fff;
@@ -66,7 +72,7 @@
 <!-- Content -->
 {% block content %}
     <!-- Breadcrumb Area  -->
-    <div class="breadcrumb-area contact">  
+    <div class="breadcrumb-area contact breadcrumb-dream">
         <div class="overlay-3"></div>  
         <div class="container">
             <div class="row justify-content-center">
@@ -91,22 +97,36 @@
                         <p>Une question sur nos prestations de photographie ou d'événementiel ? Envie de nous confier votre mariage, votre séance photo ou votre événement ? Nous sommes à votre écoute ! Remplissez le formulaire ci-dessous et un membre de notre équipe vous répondra sous 24 heures. Vous pouvez aussi nous joindre par téléphone ou par e-mail grâce aux coordonnées indiquées ci-dessous. Au plaisir d'échanger avec vous !</p>
                     </div>
                 </div>
+                
                 <div class="offset-xl-1 col-xl-6 offset-lg-1 col-lg-6">
                     <div class="subimit-form-wrap">
                         <div class="section-title">
                             <h2 class="visible-slowly-right">Envoyez-nous un message</h2>
                         </div>
-                        <form action="" method="post">
+                        {% if messages %}
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}" role="alert" style="margin-top:20px;">
+                            {{ message }}
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                        <form action="{% url 'site_:contact' %}" method="post" novalidate>
                             {% csrf_token %}
-                            <input type="text" name="name" placeholder="Nom complet" required>
-                            <input type="email" name="email" placeholder="Adresse e-mail" required>
-                            <input type="tel" name="phone" placeholder="Numéro de téléphone" required>
-                            <input type="text" name="subject" placeholder="Type de projet (mariage, portrait, événement...)" required>
-                            <textarea name="message" cols="30" rows="10" placeholder="Décrivez-nous votre projet" required></textarea>
+                            {{ form.nom_complet }}
+                            {% if form.nom_complet.errors %}<span class="field-error" style="color:#dc3545;font-size:13px;display:block;margin:-12px 0 16px;">{{ form.nom_complet.errors|striptags }}</span>{% endif %}
+                            {{ form.email }}
+                            {% if form.email.errors %}<span class="field-error" style="color:#dc3545;font-size:13px;display:block;margin:-12px 0 16px;">{{ form.email.errors|striptags }}</span>{% endif %}
+                            {{ form.telephone }}
+                            {% if form.telephone.errors %}<span class="field-error" style="color:#dc3545;font-size:13px;display:block;margin:-12px 0 16px;">{{ form.telephone.errors|striptags }}</span>{% endif %}
+                            {{ form.sujet }}
+                            {% if form.sujet.errors %}<span class="field-error" style="color:#dc3545;font-size:13px;display:block;margin:-12px 0 16px;">{{ form.sujet.errors|striptags }}</span>{% endif %}
+                            {{ form.message }}
+                            {% if form.message.errors %}<span class="field-error" style="color:#dc3545;font-size:13px;display:block;margin:-12px 0 16px;">{{ form.message.errors|striptags }}</span>{% endif %}
                             <input type="submit" value="Envoyer le message">
                         </form>
                     </div>
                 </div>
+
             </div>
             <div class="contact-info-wrap">
                 <div class="row mt-60">

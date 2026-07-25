@@ -7,6 +7,12 @@
 
 {% block styles %}
 <style>
+    .breadcrumb-area.breadcrumb-dream {
+        background-image: url("{% static 'front/assets/img/breadcrumb/banniere_dream.jpeg' %}");
+        background-position: center center;
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
     .formation-hero-copy {
         max-width: 640px;
         margin: 0 auto;
@@ -207,7 +213,7 @@
 {% endblock styles %}
 
 {% block content %}
-    <div class="breadcrumb-area team">
+    <div class="breadcrumb-area team breadcrumb-dream">
         <div class="overlay-3"></div>
         <div class="container">
             <div class="row justify-content-center">

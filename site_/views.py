@@ -1,6 +1,7 @@
 from django.shortcuts import render
 
 from about.models import AboutAccordion, AboutCounter, AboutTimeline
+from contact_us.views import contact_public
 from devis.views import demande_devis
 from medias.models import Branding, Photographie, Video, WebDesign
 from temoignage.views import donner_avis as temoignage_donner_avis
@@ -48,7 +49,7 @@ def web_design(request):
 
 
 def contact(request):
-    return render(request, 'pages/contact.html')
+    return contact_public(request)
 
 
 def apropos(request):

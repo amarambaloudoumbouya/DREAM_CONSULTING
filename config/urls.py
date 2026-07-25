@@ -31,6 +31,7 @@ urlpatterns = [
     path('a-propos-gestion/', include('about.urls')),
     path('sliders/', include('slider.urls')),
     path('medias/', include('medias.urls')),
+    path('contacts/', include('contact_us.urls')),
 ]+static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
 
 

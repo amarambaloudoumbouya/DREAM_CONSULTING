@@ -7,13 +7,20 @@
 
 <!-- Styles -->
 {% block styles %}
-
+<style>
+    .breadcrumb-area.breadcrumb-dream {
+        background-image: url("{% static 'front/assets/img/breadcrumb/banniere_dream.jpeg' %}");
+        background-position: center center;
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+</style>
 {% endblock styles %}
 
 <!-- Content -->
 {% block content %}
 <!-- Breadcrumb Area  -->
-<div class="breadcrumb-area">
+<div class="breadcrumb-area breadcrumb-dream">
     <div class="overlay-5"></div>
     <div class="container">
         <div class="row justify-content-center">

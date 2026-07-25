@@ -1,0 +1,358 @@
+{% extends 'backend/dashboard.html' %}
+{% block title %}
+<title>Dream consulting com - Messages de contact</title>
+{% endblock title %}
+
+{% block style %}
+<style>
+    .contact-stats .stat-label {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 8px;
+    }
+    .contact-stats .stat-label h5 {
+        margin: 0;
+        font-size: 13px;
+        font-weight: 500;
+        color: #8a8a8a;
+        text-transform: uppercase;
+        letter-spacing: .4px;
+    }
+    .contact-stats .stat-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .contact-stats h2 {
+        margin: 0 0 6px;
+        font-size: 32px;
+        font-weight: 600;
+        color: #2c2c2c;
+    }
+    .contact-stats p {
+        margin: 0 0 12px;
+        font-size: 12px;
+        color: #9a9a9a;
+    }
+    .contact-stats .progress { height: 6px; border-radius: 4px; background: #eef0f4; }
+    .contact-stats .progress-bar { border-radius: 4px; width: 0; }
+    .stat-total .stat-icon { background: rgba(27,20,100,.1); color: #1B1464; }
+    .stat-new .stat-icon { background: rgba(247,148,29,.15); color: #F7941D; }
+    .stat-progress .stat-icon { background: rgba(13,110,253,.12); color: #0d6efd; }
+    .stat-ok .stat-icon { background: rgba(40,167,69,.12); color: #28a745; }
+    .bar-total { background: #1B1464; }
+    .bar-new { background: #F7941D; }
+    .bar-progress { background: #0d6efd; }
+    .bar-ok { background: #28a745; }
+    #contacts-table th.col-actions,
+    #contacts-table td.col-actions {
+        white-space: nowrap;
+        width: 1%;
+        vertical-align: middle;
+    }
+    #contacts-table td.col-actions .actions-group {
+        display: inline-flex;
+        align-items: center;
+        flex-wrap: nowrap;
+        gap: 4px;
+    }
+    .preview-message {
+        background: #f7f6fb;
+        border-left: 4px solid #F7941D;
+        padding: 16px 18px;
+        border-radius: 4px;
+        white-space: pre-line;
+        line-height: 1.7;
+    }
+</style>
+{% endblock style %}
+
+{% block content %}
+<div class="page-content">
+    <div class="main-wrapper">
+
+        {% if messages %}
+        <div class="row">
+            <div class="col">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="row contact-stats">
+            <div class="col-md-6 col-xl-3">
+                <div class="card stat-widget stat-total">
+                    <div class="card-body">
+                        <div class="stat-label">
+                            <h5>Total messages</h5>
+                            <span class="stat-icon"><i class="fas fa-envelope"></i></span>
+                        </div>
+                        <h2>{{ total }}</h2>
+                        <p>Tous messages confondus</p>
+                        <div class="progress">
+                            <div class="progress-bar bar-total" style="width:100%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <div class="card stat-widget stat-new">
+                    <div class="card-body">
+                        <div class="stat-label">
+                            <h5>Nouveaux</h5>
+                            <span class="stat-icon"><i class="fas fa-clock"></i></span>
+                        </div>
+                        <h2>{{ total_nouveaux }}</h2>
+                        <p>À traiter</p>
+                        <div class="progress">
+                            <div class="progress-bar bar-new" data-width="{{ pct_nouveaux }}"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <div class="card stat-widget stat-progress">
+                    <div class="card-body">
+                        <div class="stat-label">
+                            <h5>En cours</h5>
+                            <span class="stat-icon"><i class="fas fa-spinner"></i></span>
+                        </div>
+                        <h2>{{ total_en_cours }}</h2>
+                        <p>En traitement</p>
+                        <div class="progress">
+                            <div class="progress-bar bar-progress" data-width="{{ pct_en_cours }}"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <div class="card stat-widget stat-ok">
+                    <div class="card-body">
+                        <div class="stat-label">
+                            <h5>Répondus</h5>
+                            <span class="stat-icon"><i class="fas fa-check"></i></span>
+                        </div>
+                        <h2>{{ total_repondus }}</h2>
+                        <p>Réponse envoyée</p>
+                        <div class="progress">
+                            <div class="progress-bar bar-ok" data-width="{{ pct_repondus }}"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                            <h5 class="card-title mb-0">Liste des messages</h5>
+                            <form method="get" class="d-flex gap-2">
+                                <select name="statut" class="form-select form-select-sm" style="width:auto;">
+                                    <option value="">Tous les statuts</option>
+                                    {% for value, label in statut_choices %}
+                                    <option value="{{ value }}" {% if selected_statut == value %}selected{% endif %}>{{ label }}</option>
+                                    {% endfor %}
+                                </select>
+                                <button type="submit" class="btn btn-sm btn-primary">Filtrer</button>
+                                <a href="{% url 'contact_us:admin_list' %}" class="btn btn-sm btn-secondary">Réinitialiser</a>
+                            </form>
+                        </div>
+
+                        <table id="contacts-table" class="display" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Client</th>
+                                    <th>Sujet</th>
+                                    <th>Message</th>
+                                    <th>Statut</th>
+                                    <th>Reçu le</th>
+                                    <th class="col-actions">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in messages_contact %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ item.nom_complet }}</strong><br>
+                                        <small>{{ item.email }}</small><br>
+                                        <small>{{ item.telephone }}</small>
+                                    </td>
+                                    <td>{{ item.sujet }}</td>
+                                    <td>{{ item.message|truncatewords:16 }}</td>
+                                    <td>
+                                        {% if item.statut == 'nouveau' %}
+                                        <span class="badge bg-warning text-dark">Nouveau</span>
+                                        {% elif item.statut == 'en_cours' %}
+                                        <span class="badge bg-primary">En cours</span>
+                                        {% elif item.statut == 'repondu' %}
+                                        <span class="badge bg-success">Répondu</span>
+                                        {% else %}
+                                        <span class="badge bg-secondary">Archivé</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ item.created_at|date:"d/m/Y H:i" }}</td>
+                                    <td class="col-actions">
+                                        <div class="actions-group">
+                                            <button type="button" class="btn btn-sm btn-info text-white" data-bs-toggle="modal"
+                                                data-bs-target="#preview-modal-{{ item.pk }}" title="Aperçu">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                                                data-bs-target="#reponse-modal-{{ item.pk }}" title="Répondre">
+                                                <i class="fas fa-reply"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
+                                                data-bs-target="#delete-modal-{{ item.pk }}" title="Supprimer">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center">Aucun message</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% for item in messages_contact %}
+        <div class="modal fade" id="preview-modal-{{ item.pk }}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Message — {{ item.nom_complet }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="mb-2">
+                            <strong>Email :</strong> {{ item.email }} |
+                            <strong>Tél :</strong> {{ item.telephone }}
+                        </p>
+                        <p class="mb-3"><strong>Sujet :</strong> {{ item.sujet }}</p>
+                        <div class="preview-message">{{ item.message }}</div>
+                        {% if item.reponse %}
+                        <hr>
+                        <p class="mb-2"><strong>Réponse :</strong></p>
+                        <div class="preview-message">{{ item.reponse }}</div>
+                        {% if item.reponse_envoyee_at %}
+                        <small class="text-muted">Envoyée le {{ item.reponse_envoyee_at|date:"d/m/Y H:i" }}</small>
+                        {% endif %}
+                        {% endif %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                            data-bs-toggle="modal" data-bs-target="#reponse-modal-{{ item.pk }}">
+                            Répondre
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="reponse-modal-{{ item.pk }}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <form method="post" action="{% url 'contact_us:admin_reponse' item.pk %}">
+                        {% csrf_token %}
+                        <div class="modal-header">
+                            <h5 class="modal-title">Répondre — {{ item.nom_complet }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="mb-3">
+                                <strong>Email :</strong> {{ item.email }} |
+                                <strong>Tél :</strong> {{ item.telephone }}<br>
+                                <strong>Sujet :</strong> {{ item.sujet }}
+                            </p>
+                            <div class="preview-message mb-3">{{ item.message }}</div>
+                            <div class="mb-3">
+                                <label class="form-label" for="statut-{{ item.pk }}">Statut</label>
+                                <select class="form-select" name="statut" id="statut-{{ item.pk }}" required>
+                                    {% for value, label in statut_choices %}
+                                    <option value="{{ value }}" {% if item.statut == value %}selected{% endif %}>{{ label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="reponse-{{ item.pk }}">Réponse au client</label>
+                                <textarea class="form-control" name="reponse" id="reponse-{{ item.pk }}" rows="5"
+                                    placeholder="Votre réponse au client…" required>{{ item.reponse }}</textarea>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="envoyer_email" value="on"
+                                    id="envoyer-{{ item.pk }}" checked>
+                                <label class="form-check-label" for="envoyer-{{ item.pk }}">
+                                    Envoyer la réponse par email au client
+                                </label>
+                            </div>
+                            {% if item.reponse_envoyee_at %}
+                            <small class="text-muted">Dernière réponse envoyée le {{ item.reponse_envoyee_at|date:"d/m/Y H:i" }}</small>
+                            {% endif %}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                            <button type="submit" class="btn btn-primary">Enregistrer / Envoyer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="delete-modal-{{ item.pk }}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form method="post" action="{% url 'contact_us:admin_delete' item.pk %}">
+                        {% csrf_token %}
+                        <div class="modal-header">
+                            <h5 class="modal-title">Supprimer le message</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Voulez-vous vraiment supprimer le message de <strong>{{ item.nom_complet }}</strong> ?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                            <button type="submit" class="btn btn-danger">Supprimer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+{% endblock content %}
+
+{% block script %}
+<script>
+    $(document).ready(function () {
+        $('.contact-stats .progress-bar[data-width]').each(function () {
+            $(this).css('width', ($(this).attr('data-width') || 0) + '%');
+        });
+        $('#contacts-table').DataTable({
+            order: [[4, 'desc']],
+            columnDefs: [
+                { orderable: false, targets: 5 }
+            ]
+        });
+    });
+</script>
+{% endblock script %}

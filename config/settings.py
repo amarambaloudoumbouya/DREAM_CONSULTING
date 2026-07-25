@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'about',
     'slider',
     'medias',
+    'contact_us',
 ]
 
 AUTH_USER_MODEL = 'accounts.CustomerUser'
