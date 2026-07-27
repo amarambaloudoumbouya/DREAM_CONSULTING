@@ -67,6 +67,45 @@
         padding: 8px 18px;
         font-size: 13px;
     }
+    .web-design-section .gallery-pagination {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        margin-top: 50px;
+    }
+    .web-design-section .gallery-pagination a,
+    .web-design-section .gallery-pagination span {
+        min-width: 42px;
+        height: 42px;
+        padding: 0 12px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50px;
+        border: 1px solid rgba(27, 20, 100, .18);
+        color: #1B1464;
+        font-size: 14px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all .3s ease;
+        background: #fff;
+    }
+    .web-design-section .gallery-pagination a:hover {
+        background: #1B1464;
+        border-color: #1B1464;
+        color: #fff;
+    }
+    .web-design-section .gallery-pagination .current {
+        background: #F7941D;
+        border-color: #F7941D;
+        color: #fff;
+    }
+    .web-design-section .gallery-pagination .disabled {
+        opacity: .45;
+        pointer-events: none;
+    }
 </style>
 {% endblock styles %}
 
@@ -128,6 +167,34 @@
                 </div>
                 {% endfor %}
             </div>
+
+            {% if page_obj.paginator.num_pages > 1 %}
+            <nav class="gallery-pagination" aria-label="Pagination web design">
+                {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}" title="Précédent">
+                    <i class="las la-angle-left"></i>
+                </a>
+                {% else %}
+                <span class="disabled"><i class="las la-angle-left"></i></span>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                    <span class="current">{{ num }}</span>
+                    {% else %}
+                    <a href="?page={{ num }}">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" title="Suivant">
+                    <i class="las la-angle-right"></i>
+                </a>
+                {% else %}
+                <span class="disabled"><i class="las la-angle-right"></i></span>
+                {% endif %}
+            </nav>
+            {% endif %}
         </div>
      </div>
 

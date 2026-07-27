@@ -21,7 +21,7 @@
         gap: 10px;
         margin-top: 30px;
     }
-    .photography-section .photo-filters button {
+    .photography-section .photo-filters a {
         border: 1px solid rgba(27, 20, 100, .18);
         background: #fff;
         color: #1B1464;
@@ -30,9 +30,11 @@
         font-size: 13px;
         letter-spacing: .4px;
         transition: all .3s ease;
+        text-decoration: none;
+        display: inline-block;
     }
-    .photography-section .photo-filters button:hover,
-    .photography-section .photo-filters button.active {
+    .photography-section .photo-filters a:hover,
+    .photography-section .photo-filters a.active {
         background: #1B1464;
         border-color: #1B1464;
         color: #fff;
@@ -85,8 +87,44 @@
         color: #fff;
         font-size: 26px;
     }
-    .photography-section .photo-item.is-hidden {
-        display: none !important;
+    .photography-section .photo-pagination {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        margin-top: 50px;
+    }
+    .photography-section .photo-pagination a,
+    .photography-section .photo-pagination span {
+        min-width: 42px;
+        height: 42px;
+        padding: 0 12px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50px;
+        border: 1px solid rgba(27, 20, 100, .18);
+        color: #1B1464;
+        font-size: 14px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all .3s ease;
+        background: #fff;
+    }
+    .photography-section .photo-pagination a:hover {
+        background: #1B1464;
+        border-color: #1B1464;
+        color: #fff;
+    }
+    .photography-section .photo-pagination .current {
+        background: #F7941D;
+        border-color: #F7941D;
+        color: #fff;
+    }
+    .photography-section .photo-pagination .disabled {
+        opacity: .45;
+        pointer-events: none;
     }
 </style>
 {% endblock styles %}
@@ -125,16 +163,16 @@
 
             {% if photo_categories %}
             <div class="photo-filters" id="photo-filters">
-                <button type="button" class="active" data-filter="*">Tous</button>
+                <a href="{% url 'site_:photographie' %}" class="{% if not selected_categorie %}active{% endif %}">Tous</a>
                 {% for cat in photo_categories %}
-                <button type="button" data-filter="{{ cat.slug }}">{{ cat.name }}</button>
+                <a href="?categorie={{ cat.slug }}" class="{% if selected_categorie == cat.slug %}active{% endif %}">{{ cat.name }}</a>
                 {% endfor %}
             </div>
             {% endif %}
 
             <div class="row gy-4 mt-30" id="photo-gallery">
                 {% for photo in photographies %}
-                <div class="col-xl-4 col-lg-4 col-md-6 photo-item" data-category="{{ photo.categorie_slug }}">
+                <div class="col-xl-4 col-lg-4 col-md-6 photo-item">
                     <a href="{{ photo.image_url }}" data-fancybox="galerie-{{ photo.categorie_slug }}" class="single-photo-item" data-caption="{{ photo.titre }}">
                         <img src="{{ photo.image_url }}" alt="{{ photo.titre }}">
                         <div class="photo-overlay">
@@ -150,6 +188,34 @@
                 </div>
                 {% endfor %}
             </div>
+
+            {% if page_obj.paginator.num_pages > 1 %}
+            <nav class="photo-pagination" aria-label="Pagination galerie photo">
+                {% if page_obj.has_previous %}
+                <a href="?{% if selected_categorie %}categorie={{ selected_categorie }}&{% endif %}page={{ page_obj.previous_page_number }}" title="Précédent">
+                    <i class="las la-angle-left"></i>
+                </a>
+                {% else %}
+                <span class="disabled"><i class="las la-angle-left"></i></span>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                    <span class="current">{{ num }}</span>
+                    {% else %}
+                    <a href="?{% if selected_categorie %}categorie={{ selected_categorie }}&{% endif %}page={{ num }}">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                <a href="?{% if selected_categorie %}categorie={{ selected_categorie }}&{% endif %}page={{ page_obj.next_page_number }}" title="Suivant">
+                    <i class="las la-angle-right"></i>
+                </a>
+                {% else %}
+                <span class="disabled"><i class="las la-angle-right"></i></span>
+                {% endif %}
+            </nav>
+            {% endif %}
         </div>
      </div>
 
@@ -157,28 +223,5 @@
 
 <!-- Scripts -->
 {% block scripts %}
-<script>
-    (function () {
-        var filters = document.getElementById('photo-filters');
-        if (!filters) return;
-        var buttons = filters.querySelectorAll('button');
-        var items = document.querySelectorAll('#photo-gallery .photo-item');
 
-        buttons.forEach(function (btn) {
-            btn.addEventListener('click', function () {
-                var filter = btn.getAttribute('data-filter');
-                buttons.forEach(function (b) { b.classList.remove('active'); });
-                btn.classList.add('active');
-
-                items.forEach(function (item) {
-                    if (filter === '*' || item.getAttribute('data-category') === filter) {
-                        item.classList.remove('is-hidden');
-                    } else {
-                        item.classList.add('is-hidden');
-                    }
-                });
-            });
-        });
-    })();
-</script>
 {% endblock scripts %}

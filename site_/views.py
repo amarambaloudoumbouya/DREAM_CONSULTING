@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.shortcuts import render
 
 from about.models import AboutAccordion, AboutCounter, AboutTimeline
@@ -16,35 +17,59 @@ def index(request):
 
 
 def photographie(request):
-    photographies = Photographie.objects.filter(is_active=True).order_by('ordre', 'id')
+    qs = Photographie.objects.filter(is_active=True).order_by('ordre', 'id')
+
     categories = []
     seen = set()
-    for photo in photographies:
+    for photo in qs:
         slug = photo.categorie_slug
         if slug not in seen:
             seen.add(slug)
             categories.append({'name': photo.categorie, 'slug': slug})
+
+    selected_categorie = request.GET.get('categorie', '').strip()
+    if selected_categorie:
+        matching = [c['name'] for c in categories if c['slug'] == selected_categorie]
+        if matching:
+            qs = qs.filter(categorie=matching[0])
+        else:
+            selected_categorie = ''
+
+    paginator = Paginator(qs, 9)
+    page_obj = paginator.get_page(request.GET.get('page'))
+
     return render(request, 'pages/photographie.html', {
-        'photographies': photographies,
+        'photographies': page_obj,
+        'page_obj': page_obj,
         'photo_categories': categories,
+        'selected_categorie': selected_categorie,
     })
 
 
 def video(request):
+    qs = Video.objects.filter(is_active=True).order_by('ordre', 'id')
+    page_obj = Paginator(qs, 9).get_page(request.GET.get('page'))
     return render(request, 'pages/video.html', {
-        'videos': Video.objects.filter(is_active=True).order_by('ordre', 'id'),
+        'videos': page_obj,
+        'page_obj': page_obj,
     })
 
 
 def branding(request):
+    qs = Branding.objects.filter(is_active=True).order_by('ordre', 'id')
+    page_obj = Paginator(qs, 9).get_page(request.GET.get('page'))
     return render(request, 'pages/branding.html', {
-        'brandings': Branding.objects.filter(is_active=True).order_by('ordre', 'id'),
+        'brandings': page_obj,
+        'page_obj': page_obj,
     })
 
 
 def web_design(request):
+    qs = WebDesign.objects.filter(is_active=True).order_by('ordre', 'id')
+    page_obj = Paginator(qs, 9).get_page(request.GET.get('page'))
     return render(request, 'pages/web_design.html', {
-        'web_designs': WebDesign.objects.filter(is_active=True).order_by('ordre', 'id'),
+        'web_designs': page_obj,
+        'page_obj': page_obj,
     })
 
 
