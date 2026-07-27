@@ -1,5 +1,6 @@
 {% extends "index.html" %}
 {% load static %}
+{% load pagination_tags %}
 <!-- Title -->
 {% block title %}
     <title>Photographie | Dream Consulting Com</title>
@@ -189,33 +190,7 @@
                 {% endfor %}
             </div>
 
-            {% if page_obj.paginator.num_pages > 1 %}
-            <nav class="photo-pagination" aria-label="Pagination galerie photo">
-                {% if page_obj.has_previous %}
-                <a href="?{% if selected_categorie %}categorie={{ selected_categorie }}&{% endif %}page={{ page_obj.previous_page_number }}" title="Précédent">
-                    <i class="las la-angle-left"></i>
-                </a>
-                {% else %}
-                <span class="disabled"><i class="las la-angle-left"></i></span>
-                {% endif %}
-
-                {% for num in page_obj.paginator.page_range %}
-                    {% if page_obj.number == num %}
-                    <span class="current">{{ num }}</span>
-                    {% else %}
-                    <a href="?{% if selected_categorie %}categorie={{ selected_categorie }}&{% endif %}page={{ num }}">{{ num }}</a>
-                    {% endif %}
-                {% endfor %}
-
-                {% if page_obj.has_next %}
-                <a href="?{% if selected_categorie %}categorie={{ selected_categorie }}&{% endif %}page={{ page_obj.next_page_number }}" title="Suivant">
-                    <i class="las la-angle-right"></i>
-                </a>
-                {% else %}
-                <span class="disabled"><i class="las la-angle-right"></i></span>
-                {% endif %}
-            </nav>
-            {% endif %}
+            {% gallery_pagination page_obj query_extra=pagination_query css_class="photo-pagination" label="Pagination galerie photo" %}
         </div>
      </div>
 

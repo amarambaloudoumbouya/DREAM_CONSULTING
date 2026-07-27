@@ -43,6 +43,7 @@ def photographie(request):
         'page_obj': page_obj,
         'photo_categories': categories,
         'selected_categorie': selected_categorie,
+        'pagination_query': f'categorie={selected_categorie}' if selected_categorie else '',
     })
 
 

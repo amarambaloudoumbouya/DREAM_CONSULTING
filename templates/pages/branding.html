@@ -1,5 +1,6 @@
 {% extends "index.html" %}
 {% load static %}
+{% load pagination_tags %}
 <!-- Title -->
 {% block title %}
     <title>Branding | Dream Consulting Com</title>
@@ -148,33 +149,7 @@
                 {% endfor %}
             </div>
 
-            {% if page_obj.paginator.num_pages > 1 %}
-            <nav class="gallery-pagination" aria-label="Pagination branding">
-                {% if page_obj.has_previous %}
-                <a href="?page={{ page_obj.previous_page_number }}" title="Précédent">
-                    <i class="las la-angle-left"></i>
-                </a>
-                {% else %}
-                <span class="disabled"><i class="las la-angle-left"></i></span>
-                {% endif %}
-
-                {% for num in page_obj.paginator.page_range %}
-                    {% if page_obj.number == num %}
-                    <span class="current">{{ num }}</span>
-                    {% else %}
-                    <a href="?page={{ num }}">{{ num }}</a>
-                    {% endif %}
-                {% endfor %}
-
-                {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}" title="Suivant">
-                    <i class="las la-angle-right"></i>
-                </a>
-                {% else %}
-                <span class="disabled"><i class="las la-angle-right"></i></span>
-                {% endif %}
-            </nav>
-            {% endif %}
+            {% gallery_pagination page_obj label="Pagination branding" %}
         </div>
      </div>
 
