@@ -147,6 +147,11 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 # STATIC_ROOT = BASE_DIR / 'static'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# Uploads vidéo volumineux : spill disque tôt, plafond requête 500 Mo
+FILE_UPLOAD_MAX_MEMORY_SIZE = 2 * 1024 * 1024  # 2 Mo → TemporaryUploadedFile
+DATA_UPLOAD_MAX_MEMORY_SIZE = 500 * 1024 * 1024  # 500 Mo
+FILE_UPLOAD_PERMISSIONS = 0o644
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 LOGIN_URL = 'accounts:login'

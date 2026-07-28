@@ -151,8 +151,14 @@ class VideoForm(forms.ModelForm):
                 'class': 'form-control',
                 'placeholder': 'Film de mariage',
             }),
-            'video': forms.ClearableFileInput(attrs={'class': 'form-control'}),
-            'poster': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'video': forms.ClearableFileInput(attrs={
+                'class': 'form-control',
+                'accept': 'video/mp4,video/webm,video/quicktime,video/*',
+            }),
+            'poster': forms.ClearableFileInput(attrs={
+                'class': 'form-control',
+                'accept': 'image/*',
+            }),
             'ordre': forms.NumberInput(attrs={'class': 'form-control', 'min': 0}),
             'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
