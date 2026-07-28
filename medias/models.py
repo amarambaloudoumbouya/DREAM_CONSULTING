@@ -1,3 +1,6 @@
+import re
+import uuid
+
 from django.db import models
 from django.templatetags.static import static
 
@@ -25,6 +28,13 @@ class Photographie(models.Model):
         blank=True,
         verbose_name='Image static (secours)',
         help_text='Ex. front/assets/img/gallery/1.jpg',
+    )
+    groupe_id = models.UUIDField(
+        default=uuid.uuid4,
+        db_index=True,
+        editable=False,
+        verbose_name='Groupe',
+        help_text='Identifiant partagé par les photos ajoutées en même temps.',
     )
     ordre = models.PositiveIntegerField(
         default=0,
@@ -59,6 +69,11 @@ class Photographie(models.Model):
     def categorie_slug(self):
         from django.utils.text import slugify
         return slugify(self.categorie) or 'autre'
+
+    @property
+    def titre_album(self):
+        """Titre sans le suffixe (1), (2)… pour l’affichage de la carte album."""
+        return re.sub(r'\s*\(\d+\)$', '', self.titre).strip() or self.titre
 
 
 class Branding(models.Model):

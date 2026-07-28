@@ -1,3 +1,5 @@
+import uuid
+
 from django import forms
 
 from .models import Branding, Photographie, Video, WebDesign
@@ -98,6 +100,7 @@ class PhotographieCreateForm(forms.Form):
         images = self.cleaned_data['images']
         ordre = self.cleaned_data['ordre']
         is_active = self.cleaned_data['is_active']
+        groupe_id = uuid.uuid4()
         created = []
         total = len(images)
         for index, image in enumerate(images):
@@ -106,6 +109,7 @@ class PhotographieCreateForm(forms.Form):
                 categorie=categorie,
                 titre=photo_titre,
                 image=image,
+                groupe_id=groupe_id,
                 ordre=ordre + index,
                 is_active=is_active,
             ))

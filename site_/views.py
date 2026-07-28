@@ -35,11 +35,32 @@ def photographie(request):
         else:
             selected_categorie = ''
 
-    paginator = Paginator(qs, 9)
+    # Une carte = un lot de photos ajoutées ensemble (même groupe_id)
+    albums = []
+    groups = {}
+    for photo in qs:
+        key = str(photo.groupe_id)
+        if key not in groups:
+            album = {
+                'groupe_id': key,
+                'cover': photo,
+                'photos': [],
+                'categorie': photo.categorie,
+                'categorie_slug': photo.categorie_slug,
+                'titre': photo.titre_album,
+            }
+            groups[key] = album
+            albums.append(album)
+        groups[key]['photos'].append(photo)
+
+    for album in albums:
+        album['count'] = len(album['photos'])
+
+    paginator = Paginator(albums, 9)
     page_obj = paginator.get_page(request.GET.get('page'))
 
     return render(request, 'pages/photographie.html', {
-        'photographies': page_obj,
+        'albums': page_obj,
         'page_obj': page_obj,
         'photo_categories': categories,
         'selected_categorie': selected_categorie,

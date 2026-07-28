@@ -72,6 +72,20 @@
     .photography-section .single-photo-item:hover .photo-overlay {
         opacity: 1;
     }
+    .photography-section .photo-count {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        z-index: 2;
+        background: rgba(27, 20, 100, .88);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: .3px;
+        padding: 5px 10px;
+        border-radius: 20px;
+        pointer-events: none;
+    }
     .photography-section .photo-overlay span {
         font-size: 12px;
         letter-spacing: 1px;
@@ -157,7 +171,7 @@
                 <div class="col-xl-7 col-lg-8 col-md-10 text-center">
                     <div class="section-title">
                         <h2 class="visible-slowly-right">Notre <span>galerie</span> photo</h2>
-                        <p class="pt-20 wow fadeInUp animated" data-wow-delay=".4s">Une sélection de nos plus beaux clichés : mariages, portraits, cérémonies et événements immortalisés avec passion. Cliquez sur une catégorie pour filtrer, puis sur une image pour l'agrandir.</p>
+                        <p class="pt-20 wow fadeInUp animated" data-wow-delay=".4s">Une sélection de nos plus beaux clichés : mariages, portraits, cérémonies et événements immortalisés avec passion. Cliquez sur une catégorie pour filtrer, puis sur une carte pour parcourir les photos du même album.</p>
                     </div>
                 </div>
             </div>
@@ -172,16 +186,24 @@
             {% endif %}
 
             <div class="row gy-4 mt-30" id="photo-gallery">
-                {% for photo in photographies %}
+                {% for album in albums %}
                 <div class="col-xl-4 col-lg-4 col-md-6 photo-item">
-                    <a href="{{ photo.image_url }}" data-fancybox="galerie-{{ photo.categorie_slug }}" class="single-photo-item" data-caption="{{ photo.titre }}">
-                        <img src="{{ photo.image_url }}" alt="{{ photo.titre }}">
+                    <a href="{{ album.cover.image_url }}" data-fancybox="album-{{ album.groupe_id }}" class="single-photo-item" data-caption="{{ album.titre }}">
+                        <img src="{{ album.cover.image_url }}" alt="{{ album.titre }}">
+                        {% if album.count > 1 %}
+                        <span class="photo-count">{{ album.count }} photos</span>
+                        {% endif %}
                         <div class="photo-overlay">
-                            <span>{{ photo.categorie }}</span>
-                            <h5>{{ photo.titre }}</h5>
+                            <span>{{ album.categorie }}</span>
+                            <h5>{{ album.titre }}</h5>
                             <i class="las la-search-plus"></i>
                         </div>
                     </a>
+                    {% for photo in album.photos %}
+                        {% if not forloop.first %}
+                        <a href="{{ photo.image_url }}" data-fancybox="album-{{ album.groupe_id }}" data-caption="{{ photo.titre }}" class="d-none" tabindex="-1" aria-hidden="true"></a>
+                        {% endif %}
+                    {% endfor %}
                 </div>
                 {% empty %}
                 <div class="col-12 text-center">
