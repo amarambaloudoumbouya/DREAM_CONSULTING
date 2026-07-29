@@ -17,7 +17,7 @@ def index(request):
 
 
 def photographie(request):
-    qs = Photographie.objects.filter(is_active=True).order_by('ordre', 'id')
+    qs = Photographie.objects.filter(is_active=True).order_by('ordre', '-id')
 
     categories = []
     seen = set()
@@ -69,7 +69,7 @@ def photographie(request):
 
 
 def video(request):
-    qs = Video.objects.filter(is_active=True).order_by('ordre', 'id')
+    qs = Video.objects.filter(is_active=True).order_by('ordre', '-id')
     page_obj = Paginator(qs, 9).get_page(request.GET.get('page'))
     return render(request, 'pages/video.html', {
         'videos': page_obj,
@@ -78,7 +78,7 @@ def video(request):
 
 
 def branding(request):
-    qs = Branding.objects.filter(is_active=True).order_by('ordre', 'id')
+    qs = Branding.objects.filter(is_active=True).order_by('ordre', '-id')
     page_obj = Paginator(qs, 9).get_page(request.GET.get('page'))
     return render(request, 'pages/branding.html', {
         'brandings': page_obj,
