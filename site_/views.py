@@ -17,7 +17,7 @@ def index(request):
 
 
 def photographie(request):
-    qs = Photographie.objects.filter(is_active=True).order_by('ordre', '-id')
+    qs = Photographie.objects.filter(is_active=True).order_by('-created_at', '-id')
 
     categories = []
     seen = set()
@@ -54,6 +54,8 @@ def photographie(request):
         groups[key]['photos'].append(photo)
 
     for album in albums:
+        album['photos'].sort(key=lambda p: (p.ordre, p.id))
+        album['cover'] = album['photos'][0]
         album['count'] = len(album['photos'])
 
     paginator = Paginator(albums, 9)
@@ -69,7 +71,7 @@ def photographie(request):
 
 
 def video(request):
-    qs = Video.objects.filter(is_active=True).order_by('ordre', '-id')
+    qs = Video.objects.filter(is_active=True).order_by('-created_at', '-id')
     page_obj = Paginator(qs, 9).get_page(request.GET.get('page'))
     return render(request, 'pages/video.html', {
         'videos': page_obj,
@@ -78,7 +80,7 @@ def video(request):
 
 
 def branding(request):
-    qs = Branding.objects.filter(is_active=True).order_by('ordre', '-id')
+    qs = Branding.objects.filter(is_active=True).order_by('-created_at', '-id')
     page_obj = Paginator(qs, 9).get_page(request.GET.get('page'))
     return render(request, 'pages/branding.html', {
         'brandings': page_obj,
