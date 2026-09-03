@@ -86,7 +86,7 @@
                         <table id="web-designs-table" class="display" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>Image</th>
+                                    <th>Vidéo</th>
                                     <th>Titre</th>
                                     <th>Catégorie</th>
                                     <th>Ordre</th>
@@ -98,9 +98,9 @@
                                 {% for item in web_designs %}
                                 <tr>
                                     <td>
-                                        {% if item.image_url %}
-                                        <img src="{{ item.image_url }}" alt="{{ item.titre }}"
-                                            style="max-height:48px;max-width:90px;object-fit:cover;border-radius:4px;">
+                                        {% if item.video_url %}
+                                        <video src="{{ item.video_url }}" muted
+                                            style="max-height:48px;max-width:90px;object-fit:cover;border-radius:4px;"></video>
                                         {% else %}
                                         —
                                         {% endif %}

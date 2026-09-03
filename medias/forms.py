@@ -175,7 +175,7 @@ class WebDesignForm(forms.ModelForm):
             'categorie',
             'titre',
             'description',
-            'image',
+            'video',
             'url_projet',
             'ordre',
             'is_active',
@@ -194,7 +194,10 @@ class WebDesignForm(forms.ModelForm):
                 'rows': 3,
                 'placeholder': 'Description du projet',
             }),
-            'image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'video': forms.ClearableFileInput(attrs={
+                'class': 'form-control',
+                'accept': 'video/*',
+            }),
             'url_projet': forms.URLInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'https://exemple.com',

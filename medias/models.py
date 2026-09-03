@@ -145,17 +145,17 @@ class WebDesign(models.Model):
         verbose_name='Description',
         help_text='Courte description du projet web.',
     )
-    image = models.ImageField(
+    video = models.FileField(
         upload_to='medias/web_design/',
         blank=True,
-        verbose_name='Image',
-        help_text='Aperçu du projet. Si vide, l’image de secours est utilisée.',
+        verbose_name='Vidéo',
+        help_text='Aperçu vidéo du projet (MP4). Si vide, la vidéo de secours est utilisée.',
     )
-    image_statique = models.CharField(
+    video_statique = models.CharField(
         max_length=255,
         blank=True,
-        verbose_name='Image static (secours)',
-        help_text='Ex. front/assets/img/gallery/1.jpg',
+        verbose_name='Vidéo static (secours)',
+        help_text='Ex. front/assets/video/hero-video.mp4',
     )
     url_projet = models.URLField(
         blank=True,
@@ -184,13 +184,12 @@ class WebDesign(models.Model):
         return self.titre
 
     @property
-    def image_url(self):
-        if self.image:
-            return self.image.url
-        if self.image_statique:
-            return static(self.image_statique)
+    def video_url(self):
+        if self.video:
+            return self.video.url
+        if self.video_statique:
+            return static(self.video_statique)
         return ''
-
 
 class Video(models.Model):
     categorie = models.CharField(
